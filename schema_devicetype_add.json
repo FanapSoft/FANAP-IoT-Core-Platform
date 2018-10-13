@@ -1,0 +1,57 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "DeviceType Add",
+    "type":"object",
+    "properties": {
+        "name": {
+            "type":"string"
+        },
+        "encryptionEnabled":{
+            "type":"boolean"
+        },
+        "description":{
+            "type":"string"
+        },
+        "attributeTypes": {
+            "type":"array",
+            "minItems":1,
+            "items": {
+                "type":"object",
+                "properties": {
+                    "name":{
+                        "type":"string"
+                    },
+                    "type":{
+                        "oneOf": [
+                            {
+                                "type":"string",
+                                "enum": [
+                                    "String",
+                                    "Number",
+                                    "Boolean"
+                                ]
+                            },
+                            {
+                                "type":"array",
+                                "minItems":1,
+                                "items" : {
+                                    "type":"string"
+                                }
+                            }
+                        ]
+                    }
+                },
+                "required": [
+                    "name",
+                    "type"
+                ]
+
+            }
+        }
+    },
+    "required": [
+        "name",
+        "encryptionEnabled",
+        "attributeTypes"
+    ]
+}
