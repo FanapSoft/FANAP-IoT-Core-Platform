@@ -30,9 +30,31 @@ class DeviceType_Show(Resource):
     def delete(self, devicetypeid):
         return plat.process_devicetype_delete(devicetypeid, request.args)
 
+class Device_List_Add(Resource):
+    def post(self):
+        try:
+            data = request.get_json()
+        except:
+            return plat.get_json_structure_error()
+
+        
+        return plat.process_device_add(data, request.args)
+
+    def get(self):
+        return plat.process_device_list(request.args)
+
+
+class Device_Show_Edit_Delete(Resource):
+    def get(self, deviceid):
+        return plat.process_device_show(deviceid, request.args)
+
+    def delete(self, deviceid):
+        return plat.process_device_delete(deviceid, request.args)
 
 api.add_resource(DeviceType_Add  , '/devicetype') 
 api.add_resource(DeviceType_Show , '/devicetype/<devicetypeid>')
+api.add_resource(Device_List_Add , '/device')
+api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
 
 if __name__ == '__main__':
 
