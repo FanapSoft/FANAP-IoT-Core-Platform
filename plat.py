@@ -12,6 +12,7 @@ class Platform:
     MSG_STRUCTURE_ERROR = 'MNC-M001'
     MSG_DUPLICATE_DEVICE_TYPE = 'MNC-M006'
     MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
+    MSG_DEVICETYPEID_NOTFOUND = 'MNC-M005'
 
 
     def __init__(self, database_uri):
@@ -59,6 +60,9 @@ class Platform:
     def get_unauthorized_access_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_UNAUTHORIZED_ERROR)), Platform.ERROR_CODE_UNAUTHORIZED
 
+    def get_devicetype_not_found_error(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPEID_NOTFOUND)), Platform.ERROR_CODE_UNAUTHORIZED
+
     def process_devicetype_add(self, payload, params):
         
         user = self.get_user_by_token(params)
@@ -101,7 +105,76 @@ class Platform:
             data = {"id":new_devtype_id},
             )
     
+    def process_devicetype_get(self, params):
+        user = self.get_user_by_token(params)
+        if not user:
+            return self.get_unauthorized_access_error()
 
+        # Check if device-type with same name exists
+        table = self.db.get_table('devicetype')     
+
+        devicetype_list = [dict(id=x['devicetypeid'], name=x['name']) for x in table.find(user=user)]
+
+
+        if 'name' in params:
+            substr = params['name']
+            
+            devicetype_list = list(filter(lambda x: substr in x['name'], devicetype_list))
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = {'deviceTypes':devicetype_list},
+        )       
+    
+
+    def process_devicetype_show(self, devicetypeid, params):
+        user = self.get_user_by_token(params)
+        if not user:
+            return self.get_unauthorized_access_error()
+
+        table = self.db.get_table('devicetype')
+
+        res = table.find_one(devicetypeid=devicetypeid)
+
+        if not res:
+            return self.get_devicetype_not_found_error()
+        
+
+        devtype = json.loads(res['devicetype'])['data']
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK),             
+            name = res['name'],
+            encrypted=res['enc_en'],
+            id = devicetypeid,
+            description = res['description'],
+            attributeTypes = devtype,
+        )
+
+
+    def process_devicetype_delete(self, devicetypeid, params):
+        user = self.get_user_by_token(params)
+        if not user:
+            return self.get_unauthorized_access_error()
+
+        table = self.db.get_table('devicetype')
+
+        res = table.find_one(devicetypeid=devicetypeid)
+
+        if not res:
+            return self.get_devicetype_not_found_error()
+
+
+        ret_value = dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK),             
+            data = dict(id = devicetypeid),
+        )     
+
+        table.delete(devicetypeid=devicetypeid)
+        return ret_value 
 
     def get_user_by_token(self, params):
         if not 'userToken' in params:
@@ -112,7 +185,6 @@ class Platform:
         # ToDo: Check token and get user-name
         return "todo-user"
         
-
     def test(self):
         return dict(kalam='sddsdsd', uri=self.database_uri, op=self.schema['devicetype_add']), 401
 

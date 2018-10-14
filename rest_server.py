@@ -12,15 +12,27 @@ plat = Platform('sqlite:///plat.db')
 class DeviceType_Add(Resource):
 
     def post(self):
-
         try:
             data = request.get_json()
         except:
             return plat.get_json_structure_error()
 
         return plat.process_devicetype_add(data, request.args)
+    
+    def get(self):
+        return plat.process_devicetype_get(request.args)
 
-api.add_resource(DeviceType_Add, '/devicetype') # Route_1
+class DeviceType_Show(Resource):
+
+    def get(self, devicetypeid):
+        return  plat.process_devicetype_show(devicetypeid, request.args)
+
+    def delete(self, devicetypeid):
+        return plat.process_devicetype_delete(devicetypeid, request.args)
+
+
+api.add_resource(DeviceType_Add  , '/devicetype') 
+api.add_resource(DeviceType_Show , '/devicetype/<devicetypeid>')
 
 if __name__ == '__main__':
 
