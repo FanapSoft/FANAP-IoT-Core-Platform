@@ -37,7 +37,7 @@ class Platform:
 
 
     def load_response_codes(self):
-        with open('response_codes.json') as f:
+        with open('response_codes.json', encoding='utf-8') as f:
             self.response_codes = json.load(f)['responses']
 
     def _generate_message_dict(self, message_code, dbg_msg=''):
