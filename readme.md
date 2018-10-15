@@ -8,6 +8,7 @@ Mock server for FNP rest API based on `FNP.PLF.PUB.SystemSpecificationIoTAPI.00`
 
 ## Installation (with virtualenv)
 
+In Linux terminal:
 ```
 virtualenv test_mock
 cd test_mock
@@ -20,6 +21,18 @@ pip3 install -r requirements.txt
 python3 rest_server.py
 ```
 
+In winows:
+```
+virtualenv test_mock
+cd test_mock
+Scripts\activate.bat 
+
+git clone http://172.16.110.15/fanthings/iot-mock-rest-server.git server
+cd server
+pip install -r requirements.txt 
+
+python rest_server.py
+```
 
 Check server logs in terminal
 
