@@ -5,6 +5,9 @@ import time
 from json_check import JsonChecker
 import random
 
+from flask import request
+
+
 class Platform:
     ERROR_CODE=500
     ERROR_CODE_UNAUTHORIZED=401
@@ -98,12 +101,7 @@ class Platform:
         res = table.find_one(deviceid=deviceid)   
         return res  
 
-    def process_devicetype_add(self, payload, params):
-        
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_devicetype_add(self, user, payload, params):
         payload_ok, payload_chk_msg = self.json_validator.check_devicetype_add(payload)
 
         if not payload_ok:
@@ -136,11 +134,7 @@ class Platform:
             data = {"id":new_devtype_id},
             )
     
-    def process_devicetype_get(self, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_devicetype_get(self, user, params):
         # Check if device-type with same name exists
         table = self.db.get_table('devicetype')     
 
@@ -158,13 +152,7 @@ class Platform:
             data = {'deviceTypes':devicetype_list},
         )       
     
-    def process_devicetype_show(self, devicetypeid, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
-        table = self.db.get_table('devicetype')
-
+    def process_devicetype_show(self, user, devicetypeid, params):
         res = self._get_by_devicetypeid(devicetypeid)
         if not res:
             return self.get_devicetype_not_found_error()
@@ -182,11 +170,7 @@ class Platform:
             attributeTypes = devtype,
         )
 
-    def process_devicetype_delete(self, devicetypeid, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_devicetype_delete(self, user, devicetypeid, params):
         table = self.db.get_table('devicetype')
 
         res = self._get_by_devicetypeid(devicetypeid)
@@ -208,11 +192,7 @@ class Platform:
         table.delete(devicetypeid=devicetypeid)
         return ret_value 
 
-    def process_device_add(self, payload, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_device_add(self, user, payload, params):
         payload_ok, payload_chk_msg = self.json_validator.check_device_add(payload)
 
         if not payload_ok:
@@ -257,11 +237,7 @@ class Platform:
             )
         )
 
-    def process_device_list(self, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_device_list(self, user, params):
         # Check if device-type with same name exists
         table = self.db.get_table('device')     
 
@@ -279,11 +255,7 @@ class Platform:
             data = {'devices':device_list},
         )  
 
-    def process_device_show(self, deviceid, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_device_show(self, user, deviceid, params):
         table = self.db.get_table('device')
 
         res = self._get_by_deviceid(deviceid)
@@ -308,11 +280,7 @@ class Platform:
             ),
         )
 
-    def process_device_delete(self, deviceid, params):
-        user = self.get_user_by_token(params)
-        if not user:
-            return self.get_unauthorized_access_error()
-
+    def process_device_delete(self, user, deviceid, params):
         table = self.db.get_table('device')
 
         res = self._get_by_deviceid(deviceid)
@@ -328,16 +296,36 @@ class Platform:
         table.delete(deviceid=deviceid)
         return ret_value 
 
-    def get_user_by_token(self, params):
-        if not 'userToken' in params:
-            # Token is not provided 
+    def check_user_by_token(self, token):
+        if not token:
             return None
         
-
         # ToDo: Check token and get user-name
         return "todo-user"
-        
-    def test(self):
-        return dict(kalam='sddsdsd', uri=self.database_uri, op=self.schema['devicetype_add']), 401
 
+
+    def check_usertoken(platform):
+        def decorator_wrapper(func):
+            def wrapper(self, *args, **kargs):
+                user = platform.check_user_by_token(request.headers.get('userToken'))
+                if not user:
+                    return platform.get_unauthorized_access_error()
+                
+                return func(self, *args, user=user, **kargs)
+            
+            return wrapper
+        return decorator_wrapper
     
+
+    def check_jsonbody(platform):
+        def decorator_wrapper(func):
+            def wrapper(self, *args, **kargs):
+                try:
+                    data = request.get_json()
+                except:
+                    return platform.get_json_structure_error()
+
+                return func(self, *args, data=data, **kargs)
+            
+            return wrapper
+        return decorator_wrapper
