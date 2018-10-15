@@ -35,7 +35,7 @@ Check server logs in terminal
 
 ```
 
-Use postman for testing the api!
+Use [Postman](https://www.getpostman.com/) for testing the api!
 
 ![Add devicetype](postman1.png)
 ![Show devicetype list](postman2.png)
