@@ -51,10 +51,33 @@ class Device_Show_Edit_Delete(Resource):
     def delete(self, user, deviceid):
         return plat.process_device_delete(user, deviceid, request.args)
 
+
+
+#######################################################
+# These endpoint is not part of API! 
+# Use it for managing users
+class Access_User_List(Resource):
+    def get(self):
+        return plat.process_list_users(request.args)
+    
+
+class Access_User_Add(Resource):
+    @Platform.check_jsonbody(plat)
+    def put(self, data):
+        return plat.process_add_new_user(data, request.args)
+
+
+api.add_resource(Access_User_List, '/users')
+api.add_resource(Access_User_Add, '/users/add')
+
+######################################################
+
 api.add_resource(DeviceType_Add  , '/devicetype') 
 api.add_resource(DeviceType_Show , '/devicetype/<devicetypeid>')
 api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
+
+
 
 if __name__ == '__main__':
 

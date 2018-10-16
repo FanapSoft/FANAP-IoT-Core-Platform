@@ -295,13 +295,50 @@ class Platform:
 
         table.delete(deviceid=deviceid)
         return ret_value 
+    
+    def process_list_users(self, params):
+        table = self.db.get_table('user')
+
+        usr_itr = table.find(order_by='name')
+
+        return dict(
+            timestamp=time.time(),
+            users = [dict(name=x['name'], token=x['token']) for x in usr_itr]
+        )
+    
+    def process_add_new_user(self, data, params):
+        user_name = data.get('name', None)
+        
+        if not user_name:
+            return dict(message='User name is not provided'), 401
+        
+        table = self.db.get_table('user')
+
+        if table.find_one(name=user_name):
+            return dict(message='User exists'), 401
+        
+        #token = ''.join([random.choice('0123456789ABCDEF') for x in range(12)])
+        token = 'token-' + user_name
+
+        table.insert(dict(name=user_name, token = token))
+
+        return dict(message='User created', name=user_name, token=token)
+
 
     def check_user_by_token(self, token):
         if not token:
             return None
         
-        # ToDo: Check token and get user-name
-        return "todo-user"
+        table = self.db.get_table('user')
+
+        u_row = table.find_one(token=token)
+
+        if not u_row:
+            return None
+        
+        return u_row['name']
+
+    
 
 
     def check_usertoken(platform):
