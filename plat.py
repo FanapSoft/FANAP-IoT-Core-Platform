@@ -82,13 +82,13 @@ class Platform:
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_UNAUTHORIZED_ERROR)), Platform.ERROR_CODE_UNAUTHORIZED
 
     def get_devicetype_not_found_error(self):
-        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPEID_NOTFOUND)), Platform.ERROR_CODE_UNAUTHORIZED
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPEID_NOTFOUND)), Platform.ERROR_CODE
 
     def get_device_not_found(self):
-        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICE_NOTFOUND)), Platform.ERROR_CODE_UNAUTHORIZED
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICE_NOTFOUND)), Platform.ERROR_CODE
 
     def get_devicetype_inuse_error(self):
-        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE_UNAUTHORIZED
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE
         
 
     def _get_by_devicetypeid(self, devicetypeid):
