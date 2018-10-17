@@ -14,8 +14,17 @@ class SimpleTest(unittest.TestCase):
         self.header = dict(usertoken=TOKEN)
 
 
+    def Post(self, endpoint, data):
+        return requests.post(self.host + endpoint, headers=self.header,json=data)
+
+    def Get(self, endpoint):
+        return requests.get(self.host + endpoint, headers=self.header)
+
+    def Delete(self, endpoint):
+        return requests.delete(self.host + endpoint, headers=self.header)
+
     def test_get_device_list(self):
-        res = requests.get(self.host + '/devicetype', headers=self.header)
+        res = self.Get('/devicetype')
         self.assertEqual(res.status_code, 200)
 
     
@@ -38,7 +47,7 @@ class SimpleTest(unittest.TestCase):
             attributeTypes = attributeTypes
         )
 
-        res = requests.post(self.host + '/devicetype', headers=self.header,json=payload)
+        res = self.Post('/devicetype', payload)
 
         self.assertEqual(res.status_code, 200)
         
@@ -49,7 +58,7 @@ class SimpleTest(unittest.TestCase):
 
 
         ## Check adding duplicate devicetype
-        res = requests.post(self.host + '/devicetype', headers=self.header,json=payload)
+        res = self.Post('/devicetype', payload)
         self.assertEqual(res.status_code, 500)
         data = res.json()
         self.assertEqual(data['message']['statusCode'], 'MNC-M006')
@@ -58,7 +67,7 @@ class SimpleTest(unittest.TestCase):
 
         ########################################################
         ## Get device-ID 
-        res = requests.get(self.host + '/devicetype', headers=self.header)
+        res = self.Get('/devicetype')
 
         self.assertEqual(res.status_code, 200)
 
@@ -73,7 +82,7 @@ class SimpleTest(unittest.TestCase):
 
         ########################################################
         ## Get device-type information
-        res = requests.get(self.host + '/devicetype/' + device_typeid , headers=self.header)
+        res = self.Get('/devicetype/' + device_typeid)
 
         self.assertEqual(res.status_code, 200)
         data = res.json()
@@ -97,7 +106,7 @@ class SimpleTest(unittest.TestCase):
             deviceTypeId = device_typeid
         )
 
-        res = requests.post(self.host + '/device', json=req , headers=self.header)
+        res = self.Post('/device', req)
         self.assertEqual(res.status_code, 200)
         data = res.json()
         self.assertEqual(data['message']['statusCode'], 'MNC-M000')
@@ -109,7 +118,7 @@ class SimpleTest(unittest.TestCase):
         ########################################################
         ## Show Device
 
-        res = requests.get(self.host + '/device/' + device_id, headers=self.header)
+        res = self.Get( '/device/' + device_id)
 
         self.assertEqual(res.status_code, 200)
         data = res.json()
@@ -128,7 +137,7 @@ class SimpleTest(unittest.TestCase):
         ########################################################
         ## Delete Device
 
-        res = requests.delete(self.host + '/device/' + device_id, headers=self.header)
+        res = self.Delete('/device/' + device_id)
 
         self.assertEqual(res.status_code, 200)
         data = res.json()
@@ -143,13 +152,13 @@ class SimpleTest(unittest.TestCase):
         
         ########################################################
         ## Delete devicetype
-        res = requests.delete(self.host + '/devicetype/' + device_typeid , headers=self.header)
+        res = self.Delete('/devicetype/' + device_typeid)
         self.assertEqual(res.status_code, 200)
         data = res.json()
         self.assertEqual(data['message']['statusCode'], 'MNC-M000')
 
         ## Try to delete deleted devicetype
-        res = requests.delete(self.host + '/devicetype/' + device_typeid , headers=self.header)
+        res = self.Delete('/devicetype/' + device_typeid)
         self.assertEqual(res.status_code, 500)
         data = res.json()
         self.assertEqual(data['message']['statusCode'], 'MNC-M005')
