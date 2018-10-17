@@ -21,7 +21,8 @@ class SimpleTest(unittest.TestCase):
     
     def test_devicetype_add_show_list_delete(self):
 
-        device_typename = 'test_XX'
+        device_typename = 'test_XX2'
+        device_name = 'test_device_XX2'
 
         ######################################################
         ## Add new devicetype and get ID
@@ -86,6 +87,57 @@ class SimpleTest(unittest.TestCase):
 
         self.assertEqual(attributeTypes, data['attributeTypes'])
         ######################################################## 
+
+
+        ########################################################
+        ## Add Device
+
+        req = dict(
+            name = device_name,
+            deviceTypeId = device_typeid
+        )
+
+        res = requests.post(self.host + '/device', json=req , headers=self.header)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        device_id = data['data']['id']
+        ######################################################## 
+
+
+        ########################################################
+        ## Show Device
+
+        res = requests.get(self.host + '/device/' + device_id, headers=self.header)
+
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        device_data = data['data']
+
+        self.assertEqual(device_data['id'], device_id)
+        self.assertEqual(device_data['name'], device_name)
+        self.assertEqual(device_data['deviceTypeId'], device_typeid)
+        self.assertEqual(device_data['deviceTypeName'], device_typename)
+        ######################################################## 
+
+
+
+        ########################################################
+        ## Delete Device
+
+        res = requests.delete(self.host + '/device/' + device_id, headers=self.header)
+
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        self.assertEqual(data['data']['id'], device_id)
+        ######################################################## 
+
+        
 
 
         
