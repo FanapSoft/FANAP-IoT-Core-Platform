@@ -49,10 +49,10 @@ class Platform:
     def get_unique_name(self, table, column_name, prefix):
         row = table.find_one(order_by='-'+column_name)
         if not row:
-            return "{}-{}".format(prefix, 0)
+            return "{}-{:09}".format(prefix, 0)
         
         cnt = int(row[column_name].split('-')[-1])
-        return '{}-{}'.format(prefix, cnt+1)
+        return '{}-{:09}'.format(prefix, cnt+1)
     
     def _get_unique_devicetypeid(self):
         table = self.db.get_table('devicetype')

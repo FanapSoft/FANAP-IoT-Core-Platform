@@ -7,9 +7,9 @@ from flask import Flask, request, jsonify, abort
 
 app = Flask(__name__)
 api = Api(app)
-plat = Platform('sqlite:///plat.db')
+plat = Platform('sqlite:///plat.db?check_same_thread=False')
 
-class DeviceType_Add(Resource):
+class DeviceType_List_Add(Resource):
 
     @Platform.check_jsonbody(plat)
     @Platform.check_usertoken(plat)
@@ -20,7 +20,7 @@ class DeviceType_Add(Resource):
     def get(self, user):
         return plat.process_devicetype_get(user, request.args)
 
-class DeviceType_Show(Resource):
+class DeviceType_Show_Delete(Resource):
 
     @Platform.check_jsonbody(plat)
     @Platform.check_usertoken(plat)
@@ -72,8 +72,8 @@ api.add_resource(Access_User_Add, '/users/add')
 
 ######################################################
 
-api.add_resource(DeviceType_Add  , '/devicetype') 
-api.add_resource(DeviceType_Show , '/devicetype/<devicetypeid>')
+api.add_resource(DeviceType_List_Add  , '/devicetype') 
+api.add_resource(DeviceType_Show_Delete , '/devicetype/<devicetypeid>')
 api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
 
