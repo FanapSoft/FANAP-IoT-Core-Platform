@@ -6,7 +6,7 @@ import random
 
 
 HOST = 'http://localhost:5000'
-TOKEN = 'token-tavern-user'
+TOKEN = 'token-TESTUSER'
 
 class SimpleTest(unittest.TestCase):
     def setUp(self):
