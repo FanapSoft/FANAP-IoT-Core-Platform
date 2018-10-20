@@ -48,7 +48,19 @@ Check server logs in terminal
 
 ```
 
+## Usage
 Use [Postman](https://www.getpostman.com/) for testing the api!
 
 ![Add devicetype](postman1.png)
 ![Show devicetype list](postman2.png)
+
+## Run tests
+Tests are placed in `/test` directory. Set `HOST` and `TOKEN` in `/test/test.py`
+for running test. You can add a test-user using `add_testuser.py` script.
+
+```console
+> python add_testuser.py
+
+User TESTUSER added!. Token="token-TESTUSER"
+
+```
