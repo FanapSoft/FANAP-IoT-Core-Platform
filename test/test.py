@@ -14,8 +14,12 @@ class SimpleTest(unittest.TestCase):
         self.header = dict(usertoken=TOKEN)
 
 
+
+    def Put(self, endpoint, data):
+        return requests.put(self.host + endpoint, headers=self.header, json=data)
+
     def Post(self, endpoint, data):
-        return requests.post(self.host + endpoint, headers=self.header,json=data)
+        return requests.post(self.host + endpoint, headers=self.header, json=data)
 
     def Get(self, endpoint):
         return requests.get(self.host + endpoint, headers=self.header)
@@ -131,6 +135,77 @@ class SimpleTest(unittest.TestCase):
         self.assertEqual(device_data['deviceTypeId'], device_typeid)
         self.assertEqual(device_data['deviceTypeName'], device_typename)
         ######################################################## 
+
+
+        ########################################################
+        ## Add Second Device
+
+        req = dict(
+            name = device_name + '_2',
+            deviceTypeId = device_typeid
+        )
+
+        res = self.Post('/device', req)
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        device_id2 = data['data']['id']
+        ######################################################## 
+
+
+        ########################################################
+        ## Edit second device
+
+        name = 'device_very_new_name!!!'
+        serial_number = 'KALAM-A234B9'
+
+        req = dict(name = name, serialNumber=serial_number)
+
+        res = self.Put('/device/'+device_id2, req)
+
+        self.assertEqual(res.status_code, 200)
+
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+        self.assertEqual(data['data']['id'], device_id2)
+
+
+        # Show device and check if name is changed
+        show_res = self.Get( '/device/' + device_id2)
+        self.assertEqual(res.status_code, 200)
+        data = show_res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        device_data = data['data']
+
+        self.assertEqual(device_data['id'], device_id2)
+        self.assertEqual(device_data['name'], name)
+        self.assertEqual(device_data['serialNumber'], serial_number)
+        self.assertEqual(device_data['deviceTypeId'], device_typeid)
+        self.assertEqual(device_data['deviceTypeName'], device_typename)
+
+
+        # Try assigning duplicate name to the second device
+        req = dict(name = device_name)
+        res = self.Put('/device/'+device_id2, req)
+        self.assertEqual(res.status_code, 500)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M009')
+        ######################################################## 
+
+
+        ########################################################
+        ## Delete Second Device
+
+        res = self.Delete('/device/' + device_id2)
+
+        self.assertEqual(res.status_code, 200)
+        data = res.json()
+        self.assertEqual(data['message']['statusCode'], 'MNC-M000')
+
+        self.assertEqual(data['data']['id'], device_id2)
+        ########################################################         
 
 
 

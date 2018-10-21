@@ -51,6 +51,11 @@ class Device_Show_Edit_Delete(Resource):
     def delete(self, user, deviceid):
         return plat.process_device_delete(user, deviceid, request.args)
 
+    @Platform.check_jsonbody(plat)
+    @Platform.check_usertoken(plat)
+    def put(self, user, deviceid, data):
+        return plat.process_device_edit(user, data, deviceid, request.args)
+
 
 
 #######################################################

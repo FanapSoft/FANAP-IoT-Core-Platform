@@ -296,6 +296,47 @@ class Platform:
         table.delete(deviceid=deviceid)
         return ret_value 
     
+    def process_device_edit(self, user, data, deviceid, params):
+        table = self.db.get_table('device')
+
+        res = self._get_by_deviceid(deviceid)
+        if not res:
+            return self.get_device_not_found()
+        
+        # Request should contains name or serialnumber
+        name = data.get('name', None)
+        serial_number = data.get('serialNumber', None)
+
+        if not name and not serial_number:
+            return self.get_json_structure_error()
+
+
+        # Check if new name is not present in 
+        if name and table.find_one(name=name, user=user):
+            return self.get_json_duplicate_device_error()
+
+        # Create update table
+        update_table = dict(deviceid=deviceid, user=user)
+        if name:
+            update_table['name'] = name
+        
+        if serial_number:
+            update_table['serial_number'] = serial_number
+        
+
+        update_keys=['deviceid', 'user']
+        
+        table.update(update_table, update_keys)
+
+        ret_value = dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK),             
+            data = dict(id = deviceid),
+        )     
+        return ret_value         
+
+
+
     def process_list_users(self, params):
         table = self.db.get_table('user')
 
