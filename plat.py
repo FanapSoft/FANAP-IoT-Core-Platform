@@ -14,11 +14,13 @@ class Platform:
 
     MSG_OK = 'MNC-M000'
     MSG_STRUCTURE_ERROR = 'MNC-M001'
+    MSG_PARAMS_ERROR = 'MNC-M002'
     MSG_DUPLICATE_DEVICE_TYPE = 'MNC-M006'
     MSG_DUPLICATE_DEVICE = 'MNC-M009'
     MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
     MSG_DEVICETYPEID_NOTFOUND = 'MNC-M005'
     MSG_DEVICETYPE_INUSE = 'MNC-M007'
+    MSG_ROLE_DUPLICATE = 'MNC-M012'
     MSG_DEVICE_NOTFOUND = 'MNC-M008'
 
 
@@ -62,6 +64,10 @@ class Platform:
         table = self.db.get_table('device')
         return self.get_unique_name(table, 'deviceid', 'FNPDEV')
 
+    def _get_unique_roleid(self):
+        table = self.db.get_table('role')
+        return self.get_unique_name(table, 'roleid', 'FNPROL')
+
     def _gen_enc_key(self):
         return ''.join([random.choice('0123456789ABCDEF') for x in range(8)])
 
@@ -71,6 +77,9 @@ class Platform:
 
     def get_json_structure_error(self, dbg_msg=''):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_STRUCTURE_ERROR, dbg_msg)), Platform.ERROR_CODE
+
+    def get_param_error(self, dbg_msg=''):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_PARAMS_ERROR, dbg_msg)), Platform.ERROR_CODE
 
     def get_json_duplicate_devicetype_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DUPLICATE_DEVICE_TYPE)), Platform.ERROR_CODE
@@ -89,7 +98,10 @@ class Platform:
 
     def get_devicetype_inuse_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE
-        
+    
+    def get_duplicate_devicetype_role(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_DUPLICATE)), Platform.ERROR_CODE
+
     def _get_by_devicetypeid(self, devicetypeid, user):
         table = self.db.get_table('devicetype')
         res = table.find_one(devicetypeid=devicetypeid, user=user)   
@@ -123,7 +135,8 @@ class Platform:
             description = description,
             user = user,
             devicetypeid= new_devtype_id,
-            devicetype = json.dumps(dict(data=payload['attributeTypes']))
+            devicetype = json.dumps(dict(data=payload['attributeTypes'])),
+            role = '', # Basic devicetype role (determine which field is meta-data)
             ))
 
 
@@ -347,13 +360,84 @@ class Platform:
         if not devicetype_row:
             return self.get_devicetype_not_found_error()
 
+        name = data['name']
 
-        return devicetype_row['devicetype']
+        table = self.db.get_table('role')
+
+        # Check if same role is exists
+        if table.find_one(name=name, user=user, devicetypeid=devicetypeid):
+            return self.get_duplicate_devicetype_role()
+
+
+        # Check content of the attribute list
+        devicetype_filed_list = json.loads(devicetype_row['devicetype'])['data']
+        if not self._validate_role_attribute_permissions(data['attributePermissions'], devicetype_filed_list):
+            return self.get_param_error()
+        
+        is_basic_role = name == 'device'
+
+        # if is_basic_role:
+        #     role_id = 'FNPROL-{}'.format(devicetype_row['name'])
+        # else:
+        #     role_id = self._get_unique_roleid()
+        role_id = self._get_unique_roleid()
+
+
+        description = data.get('description', '')
+
+        role_dict = self._generate_role_attribute(data['attributePermissions'], devicetype_filed_list, is_basic_role)
+        role_dict_str = json.dumps(role_dict)
+
+        table.insert( dict(
+            name = name,
+            user = user,
+            roleid = role_id,
+            devicetypeid= devicetypeid,
+            description = description,
+            premissions = role_dict_str,
+            ))
+
+        if is_basic_role:
+            # Update the devicetype table
+            table_devicetype = self.db.get_table('devicetype')
+            table_devicetype.update(dict(role=role_dict_str, user=user, devicetypeid=devicetypeid), ['user', 'devicetypeid'])
+
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = {"id":role_id},
+            )
 
 
     def _validate_role_attribute_permissions(self, role_attribute_list, devicetype_list):
-        # Check if all persmissions are in devicetype_dic
-        role_fields = []
+
+        devicetype_list = [x['name'] for x in devicetype_list]
+
+
+        _attribute_list = []
+        for x in role_attribute_list:
+            attribute_name = x['attributeTypeName']
+            if not attribute_name in devicetype_list:
+                return False
+            # Check for duplicate attribute
+            if attribute_name in _attribute_list:
+                return False
+            _attribute_list.append(attribute_name)
+
+        return True
+
+    def _generate_role_attribute(self, role_attribute_list, devicetype_list, is_device_role=False):
+        res = {}
+        if is_device_role:
+            for x in devicetype_list:
+                res[x['name']] = 'NA'
+        
+        for x in role_attribute_list:
+            res[x['attributeTypeName']] = x['permission'].upper()
+
+        return res
+        
 
     def process_list_users(self, params):
         table = self.db.get_table('user')
@@ -396,8 +480,6 @@ class Platform:
             return None
         
         return u_row['name']
-
-    
 
 
     def check_usertoken(platform):
