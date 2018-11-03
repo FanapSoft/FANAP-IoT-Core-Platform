@@ -56,7 +56,12 @@ class Device_Show_Edit_Delete(Resource):
     def put(self, user, deviceid, data):
         return plat.process_device_edit(user, data, deviceid, request.args)
 
+class Role_Add(Resource):
 
+    @Platform.check_jsonbody(plat)
+    @Platform.check_usertoken(plat)    
+    def post(self, user, data):
+        return plat.process_role_add(user, data, request.args)
 
 #######################################################
 # These endpoint is not part of API! 
@@ -81,6 +86,9 @@ api.add_resource(DeviceType_List_Add  , '/devicetype')
 api.add_resource(DeviceType_Show_Delete , '/devicetype/<devicetypeid>')
 api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
+
+api.add_resource(Role_Add, '/role')
+
 
 
 

@@ -90,15 +90,14 @@ class Platform:
     def get_devicetype_inuse_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE
         
-
-    def _get_by_devicetypeid(self, devicetypeid):
+    def _get_by_devicetypeid(self, devicetypeid, user):
         table = self.db.get_table('devicetype')
-        res = table.find_one(devicetypeid=devicetypeid)   
+        res = table.find_one(devicetypeid=devicetypeid, user=user)   
         return res  
 
-    def _get_by_deviceid(self, deviceid):
+    def _get_by_deviceid(self, deviceid, user):
         table = self.db.get_table('device')
-        res = table.find_one(deviceid=deviceid)   
+        res = table.find_one(deviceid=deviceid, user=user)   
         return res  
 
     def process_devicetype_add(self, user, payload, params):
@@ -153,7 +152,7 @@ class Platform:
         )       
     
     def process_devicetype_show(self, user, devicetypeid, params):
-        res = self._get_by_devicetypeid(devicetypeid)
+        res = self._get_by_devicetypeid(devicetypeid, user)
         if not res:
             return self.get_devicetype_not_found_error()
         
@@ -173,7 +172,7 @@ class Platform:
     def process_devicetype_delete(self, user, devicetypeid, params):
         table = self.db.get_table('devicetype')
 
-        res = self._get_by_devicetypeid(devicetypeid)
+        res = self._get_by_devicetypeid(devicetypeid, user)
         if not res:
             return self.get_devicetype_not_found_error()
 
@@ -200,7 +199,7 @@ class Platform:
         
         devicetypeid = payload['deviceTypeId']
 
-        devicetype_entry = self._get_by_devicetypeid(devicetypeid)
+        devicetype_entry = self._get_by_devicetypeid(devicetypeid, user)
         if not devicetype_entry:
             return self.get_devicetype_not_found_error()
 
@@ -258,12 +257,12 @@ class Platform:
     def process_device_show(self, user, deviceid, params):
         table = self.db.get_table('device')
 
-        res = self._get_by_deviceid(deviceid)
+        res = self._get_by_deviceid(deviceid, user)
         if not res:
             return self.get_device_not_found()
 
         devicetype_id = res['devicetypeide']
-        devicetype_entry = self._get_by_devicetypeid(devicetype_id)
+        devicetype_entry = self._get_by_devicetypeid(devicetype_id, user)
         devicetype_name = devicetype_entry['name']
 
         return dict(
@@ -283,7 +282,7 @@ class Platform:
     def process_device_delete(self, user, deviceid, params):
         table = self.db.get_table('device')
 
-        res = self._get_by_deviceid(deviceid)
+        res = self._get_by_deviceid(deviceid, user)
         if not res:
             return self.get_device_not_found()
 
@@ -299,7 +298,7 @@ class Platform:
     def process_device_edit(self, user, data, deviceid, params):
         table = self.db.get_table('device')
 
-        res = self._get_by_deviceid(deviceid)
+        res = self._get_by_deviceid(deviceid, user)
         if not res:
             return self.get_device_not_found()
         
@@ -335,7 +334,26 @@ class Platform:
         )     
         return ret_value         
 
+    def process_role_add(self, user, data, params):
+        payload_ok, payload_chk_msg = self.json_validator.check_role_add(data)
+        if not payload_ok:
+            return self.get_json_structure_error(dbg_msg=payload_chk_msg)
 
+        devicetypeid = data['deviceTypeId']
+
+
+        # First check if devicetype is valid
+        devicetype_row = self._get_by_devicetypeid(devicetypeid, user)
+        if not devicetype_row:
+            return self.get_devicetype_not_found_error()
+
+
+        return devicetype_row['devicetype']
+
+
+    def _validate_role_attribute_permissions(self, role_attribute_list, devicetype_list):
+        # Check if all persmissions are in devicetype_dic
+        role_fields = []
 
     def process_list_users(self, params):
         table = self.db.get_table('user')
