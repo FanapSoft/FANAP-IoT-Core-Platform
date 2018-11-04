@@ -68,6 +68,13 @@ class Role_Add_List(Resource):
         return plat.process_role_list(user, request.args)
 
 
+class Role_Show(Resource):
+    @Platform.check_usertoken(plat)
+    def get(self, user, roleid):
+        return plat.process_role_show(user, roleid, request.args)
+
+
+
 #######################################################
 # These endpoint is not part of API! 
 # Use it for managing users
@@ -93,6 +100,7 @@ api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
 
 api.add_resource(Role_Add_List, '/role')
+api.add_resource(Role_Show, '/role/<roleid>')
 
 
 

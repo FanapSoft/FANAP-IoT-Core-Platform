@@ -20,6 +20,7 @@ class Platform:
     MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
     MSG_DEVICETYPEID_NOTFOUND = 'MNC-M005'
     MSG_DEVICETYPE_INUSE = 'MNC-M007'
+    MSG_ROLE_NOTFOUND = 'MNC-M011'
     MSG_ROLE_DUPLICATE = 'MNC-M012'
     MSG_DEVICE_NOTFOUND = 'MNC-M008'
 
@@ -102,6 +103,9 @@ class Platform:
     def get_duplicate_devicetype_role(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_DUPLICATE)), Platform.ERROR_CODE
 
+    def get_role_not_found_error(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_NOTFOUND)), Platform.ERROR_CODE
+
     def _get_by_devicetypeid(self, devicetypeid, user):
         table = self.db.get_table('devicetype')
         res = table.find_one(devicetypeid=devicetypeid, user=user)   
@@ -111,6 +115,11 @@ class Platform:
         table = self.db.get_table('device')
         res = table.find_one(deviceid=deviceid, user=user)   
         return res  
+
+    def _get_by_roleid(self, roleid, user):
+        table = self.db.get_table('role')
+        res = table.find_one(roleid=roleid, user=user)
+        return res
 
     def process_devicetype_add(self, user, payload, params):
         payload_ok, payload_chk_msg = self.json_validator.check_devicetype_add(payload)
@@ -450,16 +459,6 @@ class Platform:
 
         search_dict = dict(user=user)
 
-        # table.insert( dict(
-        #     name = name,
-        #     user = user,
-        #     roleid = role_id,
-        #     devicetypeid= devicetypeid,
-        #     description = description,
-        #     premissions = role_dict_str,
-        #     ))
-
-
         if 'deviceTypeId' in params:
             search_dict['devicetypeid'] = params['deviceTypeId']
         
@@ -494,6 +493,32 @@ class Platform:
             ),
             )
 
+    def process_role_show(self, user, roleid, params):
+        role_row = self._get_by_roleid(roleid, user)
+
+        if not role_row:
+            return self.get_role_not_found_error()
+
+
+        permission_dict = json.loads(role_row['premissions'])
+
+        permission_list = []
+        for name, permission in permission_dict.items():
+            permission_list.append(dict(
+                attributeTypeName = name,
+                permission = permission
+            ))
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = dict(
+                name = role_row['name'],
+                description = role_row['description'],
+                deviceTypeId = role_row['devicetypeid'],
+                attributePermissions = permission_list,
+            ),
+            )
 
 
     def process_list_users(self, params):

@@ -2,3 +2,9 @@
 * Add Role: Basic Device Role: If field is not determined in role, consider N/A as permission
 * Add Role: Badic Device Role: Only consider RW and NA roles for device
 * List Role: Search for exact deviceTypeId mach when is provided
+
+
+
+ToDo:
+    * pagination is not supported for role-list yet
+    * Sortby is not supported yet (for role-list )
