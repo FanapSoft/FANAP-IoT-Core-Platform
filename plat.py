@@ -369,12 +369,13 @@ class Platform:
             return self.get_duplicate_devicetype_role()
 
 
+        is_basic_role = (name == 'device')
+
         # Check content of the attribute list
         devicetype_filed_list = json.loads(devicetype_row['devicetype'])['data']
-        if not self._validate_role_attribute_permissions(data['attributePermissions'], devicetype_filed_list):
+        if not self._validate_role_attribute_permissions( data['attributePermissions'], devicetype_filed_list, is_basic_device_role=is_basic_role):
             return self.get_param_error()
         
-        is_basic_role = name == 'device'
 
         # if is_basic_role:
         #     role_id = 'FNPROL-{}'.format(devicetype_row['name'])
@@ -409,8 +410,7 @@ class Platform:
             data = {"id":role_id},
             )
 
-
-    def _validate_role_attribute_permissions(self, role_attribute_list, devicetype_list):
+    def _validate_role_attribute_permissions(self, role_attribute_list, devicetype_list, is_basic_device_role=False):
 
         devicetype_list = [x['name'] for x in devicetype_list]
 
@@ -423,6 +423,13 @@ class Platform:
             # Check for duplicate attribute
             if attribute_name in _attribute_list:
                 return False
+
+            if is_basic_device_role:
+                # Check if permission is NA or RW
+                permission = x['permission'].upper()
+                if not permission in ['NA', 'RW']:
+                    return False
+
             _attribute_list.append(attribute_name)
 
         return True
@@ -437,7 +444,57 @@ class Platform:
             res[x['attributeTypeName']] = x['permission'].upper()
 
         return res
+
+    def process_role_list(self, user, params):
+        table = self.db.get_table('role')
+
+        search_dict = dict(user=user)
+
+        # table.insert( dict(
+        #     name = name,
+        #     user = user,
+        #     roleid = role_id,
+        #     devicetypeid= devicetypeid,
+        #     description = description,
+        #     premissions = role_dict_str,
+        #     ))
+
+
+        if 'deviceTypeId' in params:
+            search_dict['devicetypeid'] = params['deviceTypeId']
         
+        name_cmp = params.get('name','')
+        
+        role_list = []
+        for role in table.find(**search_dict):
+
+            devicetypeid = role['devicetypeid']
+            name = role['name']
+
+            if name_cmp and not name_cmp in name:
+                # This role is not match in name compare
+                continue
+
+            devicetypename = self._get_by_devicetypeid(devicetypeid, user)['name']
+
+            role_list.append(
+                dict(
+                    id = role['roleid'],
+                    name = role['name'],
+                    deviceTypeName = devicetypename,
+                    deviceTypeId = devicetypeid,
+                )
+            )
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = dict(
+                roles = role_list
+            ),
+            )
+
+
 
     def process_list_users(self, params):
         table = self.db.get_table('user')
