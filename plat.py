@@ -581,6 +581,25 @@ class Platform:
             data = {"id":roleid},
             )
 
+    def process_role_delete(self, user, roleid, params):
+        role_row = self._get_by_roleid(roleid, user)
+
+        if not role_row:
+            return self.get_role_not_found_error()
+        
+        table = self.db.get_table('role')
+
+        table.delete(user = user, roleid = roleid)
+
+        # ToDo: ForceDelete is not implemented yet
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = {"id":roleid},
+            )
+
+
     def process_list_users(self, params):
         table = self.db.get_table('user')
 

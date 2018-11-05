@@ -10,3 +10,4 @@ ToDo:
     * pagination is not supported for role-list yet
     * Sortby is not supported yet (for role-list )
     * ForceUpdate for role-update is not supported yet
+    * ForceDelete for role-delete is not supported yet

@@ -68,7 +68,7 @@ class Role_Add_List(Resource):
         return plat.process_role_list(user, request.args)
 
 
-class Role_Show_Update(Resource):
+class Role_Show_Update_Delete(Resource):
     @Platform.check_usertoken(plat)
     def get(self, user, roleid):
         return plat.process_role_show(user, roleid, request.args)
@@ -77,6 +77,10 @@ class Role_Show_Update(Resource):
     @Platform.check_usertoken(plat)
     def put(self, user, roleid, data):
         return plat.process_role_update(user, data, roleid, request.args)
+    
+    @Platform.check_usertoken(plat)
+    def delete(self, user, roleid):
+        return plat.process_role_delete(user, roleid, request.args)
 
 #######################################################
 # These endpoint is not part of API! 
@@ -103,7 +107,7 @@ api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
 
 api.add_resource(Role_Add_List, '/role')
-api.add_resource(Role_Show_Update, '/role/<roleid>')
+api.add_resource(Role_Show_Update_Delete, '/role/<roleid>')
 
 
 
