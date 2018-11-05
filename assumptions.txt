@@ -1,10 +1,12 @@
-* Add Role: Don't allow role with duplicate attribute name
-* Add Role: Basic Device Role: If field is not determined in role, consider N/A as permission
-* Add Role: Badic Device Role: Only consider RW and NA roles for device
-* List Role: Search for exact deviceTypeId mach when is provided
+1  Add Role: Don't allow role with duplicate attribute name
+2  Add Role: Basic Device Role: If field is not determined in role, consider N/A as permission
+3  Add Role: Badic Device Role: Only consider RW and NA roles for device
+4  List Role: Search for exact deviceTypeId mach when is provided
+6  Update Role: Don't allow changing basic device-role (name=device) (error MNC-M013 is used)
 
 
 
 ToDo:
     * pagination is not supported for role-list yet
     * Sortby is not supported yet (for role-list )
+    * ForceUpdate for role-update is not supported yet

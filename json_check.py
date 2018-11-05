@@ -11,6 +11,7 @@ class JsonChecker:
             devicetype_add = self._load_schema('schema_devicetype_add.json'),
             device_add = self._load_schema('schema_device_add.json'),
             role_add = self._load_schema('schema_role_add.json'),
+            role_update = self._load_schema('schema_role_update.json')
         )
 
 
@@ -35,6 +36,10 @@ class JsonChecker:
         schema = self.checkers['role_add']
         return self._validate(instance, schema)
      
+    def check_role_update(self, instance):
+        schema = self.checkers['role_update']
+        return self._validate(instance, schema)
+
 
     def _load_schema(self, filename):
         with open(filename , 'r') as f:

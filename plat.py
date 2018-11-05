@@ -22,6 +22,7 @@ class Platform:
     MSG_DEVICETYPE_INUSE = 'MNC-M007'
     MSG_ROLE_NOTFOUND = 'MNC-M011'
     MSG_ROLE_DUPLICATE = 'MNC-M012'
+    MSG_ROLE_INUSE = 'MNC-M013'
     MSG_DEVICE_NOTFOUND = 'MNC-M008'
 
 
@@ -75,7 +76,6 @@ class Platform:
     def _gen_device_token(self):
         return 'token-{}'.format(''.join([random.choice('0123456789ABCDEF') for x in range(4)]))
 
-
     def get_json_structure_error(self, dbg_msg=''):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_STRUCTURE_ERROR, dbg_msg)), Platform.ERROR_CODE
 
@@ -100,6 +100,9 @@ class Platform:
     def get_devicetype_inuse_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE
     
+    def get_role_inuse_error(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_INUSE)), Platform.ERROR_CODE
+
     def get_duplicate_devicetype_role(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_DUPLICATE)), Platform.ERROR_CODE
 
@@ -404,7 +407,7 @@ class Platform:
             roleid = role_id,
             devicetypeid= devicetypeid,
             description = description,
-            premissions = role_dict_str,
+            permissions = role_dict_str,
             ))
 
         if is_basic_role:
@@ -500,7 +503,7 @@ class Platform:
             return self.get_role_not_found_error()
 
 
-        permission_dict = json.loads(role_row['premissions'])
+        permission_dict = json.loads(role_row['permissions'])
 
         permission_list = []
         for name, permission in permission_dict.items():
@@ -520,6 +523,63 @@ class Platform:
             ),
             )
 
+    def process_role_update(self, user, data, roleid, params):
+        # Check if json structure is OK. Same as role-add
+
+        role_row = self._get_by_roleid(roleid, user)
+
+        if not role_row:
+            return self.get_role_not_found_error()
+
+        payload_ok, payload_chk_msg = self.json_validator.check_role_update(data)
+        if not payload_ok:
+            return self.get_json_structure_error(dbg_msg=payload_chk_msg)
+
+        table = self.db.get_table('role')
+
+        change_dict = {}
+
+        # Check if name dose not exist
+        if 'name' in data:
+            new_name = data['name']
+            # Check if same role is exists
+            if table.find_one(name=new_name, user=user, devicetypeid=role_row['devicetypeid']):
+                return self.get_duplicate_devicetype_role()
+            
+            change_dict['name'] = new_name
+        
+        if 'description' in data:
+            change_dict['description'] = data['description']
+
+        
+        if 'attributePermissions' in data:
+            # Validate the sections
+            devicetype_row = self._get_by_devicetypeid(role_row['devicetypeid'], user)
+            devicetype_filed_list = json.loads(devicetype_row['devicetype'])['data']
+            if not self._validate_role_attribute_permissions( data['attributePermissions'], devicetype_filed_list, False):
+                return self.get_param_error()
+            
+            role_dict = self._generate_role_attribute(data['attributePermissions'], devicetype_filed_list, False)
+            role_dict_str = json.dumps(role_dict)
+            change_dict['permissions'] = role_dict_str
+        
+
+        if change_dict:
+            change_dict['user'] = user
+            change_dict['roleid'] = roleid
+            change_dict['devicetypeid'] = role_row['devicetypeid']
+
+            update_keys  = ['user', 'roleid', 'devicetypeid']
+
+            table.update(change_dict, update_keys)
+
+        # Support "forceUpdate"
+
+        return dict(
+            timestamp=time.time(),  
+            message = self._generate_message_dict(Platform.MSG_OK), 
+            data = {"id":roleid},
+            )
 
     def process_list_users(self, params):
         table = self.db.get_table('user')
@@ -548,7 +608,6 @@ class Platform:
         table.insert(dict(name=user_name, token = token))
 
         return dict(message='User created', name=user_name, token=token)
-
 
     def check_user_by_token(self, token):
         if not token:

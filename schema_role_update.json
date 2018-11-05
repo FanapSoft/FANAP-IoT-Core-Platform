@@ -1,0 +1,43 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "Role Update",
+    "type":"object",
+    "properties": {
+        "name": {
+            "type":"string"
+        },
+        "description":{
+            "type":"string"
+        },
+        "ForceUpdate": {
+            "type":"boolean"
+        },
+        "attributePermissions": {
+            "type":"array",
+            "items": {
+                "type":"object",
+                "properties": {
+                    "attributeTypeName":{
+                        "type":"string"
+                    },
+                    "permission": {
+                        "type":"string",
+                        "enum":[
+                            "NA",
+                            "na",
+                            "r",
+                            "R",
+                            "rw",
+                            "RW"
+                        ]
+                    }
+                },
+                "required": [
+                    "attributeTypeName",
+                    "permission"
+                ]
+
+            }
+        }
+    }
+}
