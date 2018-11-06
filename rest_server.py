@@ -2,8 +2,8 @@
 from plat import Platform
 
 
-from flask_restful import Resource, Api, reqparse
-from flask import Flask, request, jsonify, abort
+from flask_restful import Resource, Api
+from flask import Flask, request
 
 
 application = Flask(__name__)
