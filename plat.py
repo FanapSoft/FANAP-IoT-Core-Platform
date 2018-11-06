@@ -17,13 +17,15 @@ class Platform:
     MSG_PARAMS_ERROR = 'MNC-M002'
     MSG_DUPLICATE_DEVICE_TYPE = 'MNC-M006'
     MSG_DUPLICATE_DEVICE = 'MNC-M009'
-    MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
     MSG_DEVICETYPEID_NOTFOUND = 'MNC-M005'
     MSG_DEVICETYPE_INUSE = 'MNC-M007'
     MSG_ROLE_NOTFOUND = 'MNC-M011'
     MSG_ROLE_DUPLICATE = 'MNC-M012'
     MSG_ROLE_INUSE = 'MNC-M013'
     MSG_DEVICE_NOTFOUND = 'MNC-M008'
+    MSG_DEVICE_ROLE_NOT_DEFINED = 'MNC-M119'
+    MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
+
 
 
     def __init__(self, database_uri):
@@ -38,7 +40,6 @@ class Platform:
         
         with open('schema_devicetype_add.json') as f:
             self.schema['devicetype_add'] = json.load(f)
-
 
     def load_response_codes(self):
         with open('response_codes.json', encoding='utf-8') as f:
@@ -108,6 +109,9 @@ class Platform:
 
     def get_role_not_found_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_ROLE_NOTFOUND)), Platform.ERROR_CODE
+
+    def get_device_role_not_defined_error(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICE_ROLE_NOT_DEFINED)), Platform.ERROR_CODE
 
     def _get_by_devicetypeid(self, devicetypeid, user):
         table = self.db.get_table('devicetype')
@@ -234,6 +238,11 @@ class Platform:
         if table.find_one(name=payload['name'], user=user):
             return self.get_json_duplicate_device_error()
 
+        # Check if device-role is defined
+        table_role = self.db.get_table('role')
+        role_row = table_role.find_one(devicetypeid=devicetypeid, name='device', user=user)
+        if not role_row:
+            return self.get_device_role_not_defined_error()
 
         serialNumber = params.get('serialNumber','')
 
@@ -598,6 +607,18 @@ class Platform:
             message = self._generate_message_dict(Platform.MSG_OK), 
             data = {"id":roleid},
             )
+
+    def process_role_grant(self, user, data, params):
+
+        # payload_ok, payload_chk_msg = self.json_validator.check_role_grant(data)
+        # if not payload_ok:
+        #     return self.get_json_structure_error(dbg_msg=payload_chk_msg)
+
+
+        return dict(msg = 'This is role granting')
+
+    
+
 
 
     def process_list_users(self, params):

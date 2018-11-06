@@ -11,7 +11,8 @@ class JsonChecker:
             devicetype_add = self._load_schema('schema_devicetype_add.json'),
             device_add = self._load_schema('schema_device_add.json'),
             role_add = self._load_schema('schema_role_add.json'),
-            role_update = self._load_schema('schema_role_update.json')
+            role_update = self._load_schema('schema_role_update.json'),
+            role_grant = self._load_schema('schema_role_grant.json')
         )
 
 
@@ -38,6 +39,11 @@ class JsonChecker:
      
     def check_role_update(self, instance):
         schema = self.checkers['role_update']
+        return self._validate(instance, schema)
+
+
+    def check_role_grant(self, instance):
+        schema = self.checkers['role_grant']
         return self._validate(instance, schema)
 
 

@@ -3,6 +3,7 @@
 3  Add Role: Badic Device Role: Only consider RW and NA roles for device
 4  List Role: Search for exact deviceTypeId mach when is provided
 6  Update Role: Don't allow changing basic device-role (name=device) (error MNC-M013 is used)
+7  Device Add: Define new error to prevent adding a device without basic-role (MNC-M119)
 
 
 

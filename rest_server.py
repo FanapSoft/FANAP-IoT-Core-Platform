@@ -82,6 +82,17 @@ class Role_Show_Update_Delete(Resource):
     def delete(self, user, roleid):
         return plat.process_role_delete(user, roleid, request.args)
 
+
+class RoleGrant_Grant(Resource):
+
+    @Platform.check_jsonbody(plat)
+    @Platform.check_usertoken(plat)    
+    def post(self, user, data):
+        return plat.process_role_grant(user, data, request.args)
+
+    def get(self):
+        return dict(msg="this is GET role/grant ")
+
 #######################################################
 # These endpoint is not part of API! 
 # Use it for managing users
@@ -106,8 +117,11 @@ api.add_resource(DeviceType_Show_Delete , '/devicetype/<devicetypeid>')
 api.add_resource(Device_List_Add , '/device')
 api.add_resource(Device_Show_Edit_Delete, '/device/<deviceid>')
 
+
 api.add_resource(Role_Add_List, '/role')
 api.add_resource(Role_Show_Update_Delete, '/role/<roleid>')
+
+api.add_resource(RoleGrant_Grant, '/role/grant')
 
 
 
