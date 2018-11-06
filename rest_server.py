@@ -5,8 +5,9 @@ from plat import Platform
 from flask_restful import Resource, Api, reqparse
 from flask import Flask, request, jsonify, abort
 
-app = Flask(__name__)
-api = Api(app)
+
+application = Flask(__name__)
+api = Api(application)
 plat = Platform('sqlite:///plat.db?check_same_thread=False')
 
 class DeviceType_List_Add(Resource):
@@ -128,4 +129,4 @@ api.add_resource(RoleGrant_Grant, '/role/grant')
 
 if __name__ == '__main__':
 
-    app.run(debug=True,host='0.0.0.0')
+    application.run(debug=True,host='0.0.0.0')

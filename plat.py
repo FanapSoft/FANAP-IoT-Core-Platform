@@ -22,6 +22,7 @@ class Platform:
     MSG_ROLE_NOTFOUND = 'MNC-M011'
     MSG_ROLE_DUPLICATE = 'MNC-M012'
     MSG_ROLE_INUSE = 'MNC-M013'
+    MSG_USER_NOTFOUND = 'MNC-M014'
     MSG_DEVICE_NOTFOUND = 'MNC-M008'
     MSG_DEVICE_ROLE_NOT_DEFINED = 'MNC-M119'
     MSG_UNAUTHORIZED_ERROR = 'MNC-M401'
@@ -97,6 +98,9 @@ class Platform:
 
     def get_device_not_found(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICE_NOTFOUND)), Platform.ERROR_CODE
+
+    def get_user_not_found_error(self):
+        return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_USER_NOTFOUND)), Platform.ERROR_CODE
 
     def get_devicetype_inuse_error(self):
         return dict(timeStamp=time.time(), data={}, message = self._generate_message_dict(Platform.MSG_DEVICETYPE_INUSE)), Platform.ERROR_CODE
@@ -610,9 +614,19 @@ class Platform:
 
     def process_role_grant(self, user, data, params):
 
-        # payload_ok, payload_chk_msg = self.json_validator.check_role_grant(data)
-        # if not payload_ok:
-        #     return self.get_json_structure_error(dbg_msg=payload_chk_msg)
+        payload_ok, payload_chk_msg = self.json_validator.check_role_grant(data)
+        if not payload_ok:
+            return self.get_json_structure_error(dbg_msg=payload_chk_msg)
+
+        # Check if userid is valid
+        
+        table_user = self.db.get_table('user')
+        user_row = table.find_one(name=data['username'])
+
+        if not user_row:
+            return self.get_user_not_found_error()
+
+
 
 
         return dict(msg = 'This is role granting')
