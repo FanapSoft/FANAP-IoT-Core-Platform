@@ -6,7 +6,8 @@ import time
 
 
 _json_schema_files = dict (
-    user = 'schema_user_add.json'
+    user = 'schema_user_add.json',
+    devicetype = 'schema_devicetype_add.json'
 )
 
 
