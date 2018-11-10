@@ -34,3 +34,14 @@ class User(db.Model):
             return False
 
     
+    @staticmethod
+    def verifyToken(token):
+        if not token:
+            return None
+            
+        usr = User.query.filter(User.token == token).first()
+
+        if usr:
+            return usr.username
+        else:
+            return None

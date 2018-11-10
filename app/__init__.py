@@ -13,8 +13,9 @@ api = Api(application)
 
 import app.user
 import app.exception
-
+import app.devicetype
 
 app.exception.register_exceptions(application)
 
 app.user.connect(api, '/user')
+app.devicetype.connect(api, '/devicetype')

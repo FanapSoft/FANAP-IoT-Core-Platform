@@ -21,18 +21,20 @@ MSG_DICT = {
 class ApiExp:
 
     class Structural(Exception):
-        status_code = ErrorStatusCode
+        #status_code = ErrorStatusCode
         msg_id = 'MNC-M001'
         def __init__(self, **args):
             self.payload = args
 
     class Parameters(Exception):
-        status_code = ErrorStatusCode
         msg_id = 'MNC-M002'
     
     class UserExists(Exception):
         msg_id = 'MNC-M120'
-        status_code = ErrorStatusCode
+
+    class AccessDenied(Exception):
+        msg_id = 'MNC-M401'
+
 
 
 def get_message(msg_id):

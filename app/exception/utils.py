@@ -4,13 +4,19 @@ import inspect
 
 from .exceptions import get_message
 from .exceptions import ApiExp
+from .exceptions import ErrorStatusCode
 
 
+default_status_code = ErrorStatusCode
 
 def generate_response(exception_class):
     payload = dict()
     if hasattr(exception_class, 'payload'):
         payload = exception_class.payload
+
+    status_code = default_status_code
+    if hasattr(exception_class, 'status_code'):
+        status_code = exception_class.status_code
 
     ret_dict = dict(
         timeStamp = time.time(),
@@ -22,7 +28,7 @@ def generate_response(exception_class):
         **payload
     )
 
-    return jsonify(ret_dict), exception_class.status_code
+    return jsonify(ret_dict), status_code
 
 
 def register_exceptions(app):
