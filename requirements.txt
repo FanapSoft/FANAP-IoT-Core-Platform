@@ -3,3 +3,4 @@ jsonschema
 flask
 Flask-RESTful
 requests
+flask-sqlalchemy

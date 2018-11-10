@@ -1,0 +1,13 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "Add new user",
+    "type":"object",
+    "properties": {
+        "name": {
+            "type":"string"
+        }
+    },
+    "required": [
+        "name"
+    ]
+}

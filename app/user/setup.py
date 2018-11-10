@@ -2,24 +2,17 @@
 
 from flask_restful import Resource
 from app.validation import check_jsonbody
-
+from .impl import user_list, user_add
 
 class Access_User_List(Resource):
     def get(self):
-        # return plat.process_list_users(request.args)
-        return dict(msg='User List')
+        return user_list()
     
 
 class Access_User_Add(Resource):
-    # @Platform.check_jsonbody(plat)
-    # def put(self, data):
-    #     return plat.process_add_new_user(data, request.args)
-
     @check_jsonbody
     def put(self, data):
-        return dict(msg='This is User ADD', data=data)
-
-
+        return user_add(data)
 
 
 def connect(rest_api, endpoint):

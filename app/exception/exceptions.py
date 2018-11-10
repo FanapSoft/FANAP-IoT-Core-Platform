@@ -14,6 +14,7 @@ MSG_DICT = {
     "MNC-M013" : "نقش روی دستگاه در حال استفاده است",
     "MNC-M014" : "کاربر پیدا نشد. لطفا دوباره تلاش کنید",
     "MNC-M119" : "نقش دستگاه تعریف نشده است",
+    "MNC-M120" : "اسم کاربر تکراری است",
     "MNC-M401" : "دسترسی غیر مجاز",
 }
 
@@ -22,19 +23,16 @@ class ApiExp:
     class Structural(Exception):
         status_code = ErrorStatusCode
         msg_id = 'MNC-M001'
+        def __init__(self, **args):
+            self.payload = args
 
     class Parameters(Exception):
         status_code = ErrorStatusCode
         msg_id = 'MNC-M002'
     
-    class Khafan(Exception):
-        status_code = 411
-        msg_id = 'MNC-M012'
-
-        def __init__(self, values={}):
-            self.payload = values
-
-
+    class UserExists(Exception):
+        msg_id = 'MNC-M120'
+        status_code = ErrorStatusCode
 
 
 def get_message(msg_id):
