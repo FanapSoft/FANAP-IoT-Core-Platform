@@ -31,6 +31,7 @@ def device_add(user, payload, params):
     check_unique_name(user, name)
 
     # ToDo: Check for basic-role
+    # ToDo: Implement attributeValues for setting initial of meta-data
 
     new_device = Device(
         name=name,
