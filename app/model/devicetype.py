@@ -13,6 +13,7 @@ class DeviceType(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     _attributes = db.Column(db.Text)
     devices = db.relationship('Device', backref='devicetype')
+    roles = db.relationship('Role', backref='devicetype', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
@@ -35,3 +36,6 @@ class DeviceType(db.Model):
             name=self.name,
             id=self.typeid
         )
+
+    def get_devicerole(self):
+        return self.roles.query.filter_by(name='device').first()

@@ -24,12 +24,10 @@
                     "permission": {
                         "type":"string",
                         "enum":[
-                            "NA",
-                            "na",
-                            "r",
+                            "N",
                             "R",
-                            "rw",
-                            "RW"
+                            "RW",
+                            "W"
                         ]
                     }
                 },

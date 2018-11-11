@@ -21,5 +21,9 @@ def unique_device_token():
     return randid('DeT', size=20)
 
 
+def unique_role_id():
+    return randid('RL')
+
+
 def generate_enc_key():
     return randid('', size=32)
