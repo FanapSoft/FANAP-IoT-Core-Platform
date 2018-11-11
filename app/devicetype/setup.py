@@ -3,14 +3,14 @@
 from flask_restful import Resource
 from flask import request
 
-from app.validation import check_jsonbody, check_user_token
-
-from .devicetype import *
+from app.validation import json_validator, check_user_token
+from .devicetype import devicetype_add, devicetype_list
+from .devicetype import devicetype_show, devicetype_delete
 
 
 class DeviceType_List_Add(Resource):
 
-    @check_jsonbody
+    @json_validator('devicetype')
     @check_user_token
     def post(self, user, data):
         return devicetype_add(user, data, request.args)

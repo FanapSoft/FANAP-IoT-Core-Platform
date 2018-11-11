@@ -1,8 +1,9 @@
 # Setup Application in Flask rest framework
 
 from flask_restful import Resource
-from app.validation import check_jsonbody
+from app.validation import json_validator
 from .impl import user_list, user_add
+
 
 class Access_User_List(Resource):
     def get(self):
@@ -10,7 +11,7 @@ class Access_User_List(Resource):
     
 
 class Access_User_Add(Resource):
-    @check_jsonbody
+    @json_validator('user')
     def put(self, data):
         return user_add(data)
 

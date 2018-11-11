@@ -1,4 +1,2 @@
-from .body import check_jsonbody
-from .jsoncheck import json_validate
-
+from .jsoncheck import json_validator
 from .check_user_token import check_user_token

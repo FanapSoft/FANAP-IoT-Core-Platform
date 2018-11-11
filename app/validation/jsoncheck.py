@@ -3,6 +3,7 @@ import json
 import os
 from app.exception import ApiExp
 import time
+from flask import request
 
 
 _json_schema_files = dict (
@@ -46,3 +47,21 @@ def create_schema_dict(filename_dict):
 
 
 schema_dict = create_schema_dict(_json_schema_files)
+
+
+def json_validator(schema_name):
+    def decorator_wrapper(func):
+        def wrapper(self, *args, **kwargs):
+
+            try:
+                data = request.get_json()
+            except:
+                raise ApiExp.Structural
+            
+            if schema_name:
+                json_validate(schema_name, data)
+
+            return func(self, *args, data=data, **kwargs)
+        return wrapper
+    return decorator_wrapper
+

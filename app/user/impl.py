@@ -1,7 +1,6 @@
 # Implementation for user Add/List
 
 from app.exception import ApiExp
-from app.validation import json_validate
 from app.model import User
 import time
 
@@ -16,8 +15,6 @@ def user_list():
 
 
 def user_add(data):
-    json_validate('user', data)
-
     username = data['name']
     token = User.add(username)
 

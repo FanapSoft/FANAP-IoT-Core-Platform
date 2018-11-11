@@ -1,4 +1,3 @@
-from app.validation import json_validate
 from app.model import DeviceType
 from app.exception import ApiExp
 from app.common import get_ok_response_body
@@ -22,8 +21,6 @@ def get_by_devicetypeid_or_404(user, devicetypeid):
     return dt
 
 def devicetype_add(user, payload, params):
-    json_validate('devicetype', payload)
-
     name = payload['name']
     enc = payload['encryptionEnabled']
     description = payload.get('description', '')
