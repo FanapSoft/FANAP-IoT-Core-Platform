@@ -5,7 +5,7 @@ from app.exception import ApiExp
 
 
 def check_user_token(func):
-    def wrapper(self, *args, **kargs):
+    def wrapper_usertoken(self, *args, **kargs):
         token = request.headers.get('userToken')
 
         username = User.verifyToken(token)
@@ -14,5 +14,5 @@ def check_user_token(func):
             raise ApiExp.AccessDenied
 
         return func(self, *args, user=username, **kargs)
-    
-    return wrapper
+
+    return wrapper_usertoken
