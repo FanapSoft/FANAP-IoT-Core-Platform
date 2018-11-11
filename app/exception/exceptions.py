@@ -38,6 +38,9 @@ class ApiExp:
     class DeviceTypeExists(Exception):
         msg_id = 'MNC-M006'
 
+    class DeviceTypeNotFound(Exception):
+        msg_id = 'MNC-M005'
+
 def get_message(msg_id):
     return MSG_DICT.get(msg_id, 'Unknown')
 

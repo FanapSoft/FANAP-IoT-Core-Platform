@@ -3,3 +3,8 @@ __pycache__/
 *.py[cod]
 *$py.class
 *.db
+.coverage
+htmlcov/
+test/.coverage
+test/htmlcov/
+tmp/

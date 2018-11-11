@@ -1,20 +1,25 @@
 from app.validation import json_validate
 from app.model import DeviceType
-from app.exception import ApiExp, get_ok_message_dict
+from app.exception import ApiExp
+from app.common import get_ok_response_body
 from app import db
 import time
 
 
-def check_unique_name(username, devicetypename):
-    dt = DeviceType.query.filter(
-        DeviceType.name == devicetypename, 
-        DeviceType.username == username
+def check_unique_name(user, devicetypename):
+    dt = DeviceType.query.filter_by(
+        name = devicetypename, 
+        owner = user
     ).first()
 
     if dt:
         raise ApiExp.DeviceTypeExists
 
-
+def get_by_devicetypeid_or_404(user, devicetypeid):
+    dt = DeviceType.query.filter_by(owner=user, typeid=devicetypeid).first()
+    if not dt:
+        raise ApiExp.DeviceTypeNotFound
+    return dt
 
 def devicetype_add(user, payload, params):
     json_validate('devicetype', payload)
@@ -25,7 +30,7 @@ def devicetype_add(user, payload, params):
 
     check_unique_name(user, name)
 
-    dt = DeviceType(name=name, username = user, enc=enc, description=description)
+    dt = DeviceType(name=name, owner = user, enc=enc, description=description)
 
     dt.attributes = payload['attributeTypes']
 
@@ -34,13 +39,47 @@ def devicetype_add(user, payload, params):
     db.session.add(dt)
     db.session.commit()
 
-    return dict(
-        timestamp=time.time(),  
-        message = get_ok_message_dict(), 
-        data = {"id":new_devtype_id},
-        )
+    return get_ok_response_body(data = {"id":new_devtype_id})
 
 def devicetype_list(user, params):
+    q = DeviceType.query.filter_by(owner = user)
+
+    if 'name' in params:
+        name_substr = params['name']
+        q = q.filter(DeviceType.name.contains(name_substr))
+    
+    # ToDo: Implement pagination
+
+    devt_list = [dict(
+        id=x.typeid,
+        name=x.name
+    ) for x in q.all()]
 
 
-    pass
+    return get_ok_response_body(
+        data = dict(deviceTypes=devt_list)
+    )
+
+def devicetype_show(user, devicetypeid, params):
+
+    dt = get_by_devicetypeid_or_404(user, devicetypeid)
+
+    return get_ok_response_body(
+        name = dt.name,
+        encrypted = dt.enc,
+        id = dt.typeid,
+        description = dt.description,
+        attributeTypes = dt.attributes,
+    )
+
+
+def devicetype_delete(user, devicetypeid, params):
+
+    dt = get_by_devicetypeid_or_404(user, devicetypeid)
+
+    db.session.delete(dt)
+    db.session.commit()
+
+    return get_ok_response_body(
+        data = dict(id=devicetypeid)
+    )
