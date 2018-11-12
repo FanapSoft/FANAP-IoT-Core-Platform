@@ -12,6 +12,7 @@ class Role(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     description = db.Column(db.Text)
     _permissions = db.Column(db.Text)
+    grantroles = db.relationship('RoleGrant', backref='role', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)

@@ -11,6 +11,12 @@ class User(db.Model):
     devicetypes = db.relationship('DeviceType', backref='owner')
     devices = db.relationship('Device', backref='owner')
     roles = db.relationship('Role', backref='owner', lazy='dynamic')
+    owned_rolegrants = db.relationship(
+        'RoleGrant', backref='owner',
+        lazy='dynamic', foreign_keys='RoleGrant.owner_id')
+    grantedroles = db.relationship(
+        'RoleGrant', backref='granted_user',
+        lazy='dynamic', foreign_keys='RoleGrant.granted_user_id')
 
     def __repr__(self):
         return '<{username} {token}>'.format(

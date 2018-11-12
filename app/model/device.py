@@ -14,6 +14,7 @@ class Device(db.Model):
     serial_number = db.Column(db.String(128))
     label = db.Column(db.String(128))
     push_url = db.Column(db.String(128))
+    grantroles = db.relationship('RoleGrant', backref='device', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
