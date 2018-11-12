@@ -59,6 +59,9 @@ class ApiExp:
     class RoleUpdateNotAllowed(Exception):
         msg_id = 'MNC-M121'
 
+    class DeviceRoleNotDefined(Exception):
+        msg_id = 'MNC-M119'
+
 
 def get_message(msg_id):
     return MSG_DICT.get(msg_id, 'Unknown')

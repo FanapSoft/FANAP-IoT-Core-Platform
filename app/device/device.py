@@ -30,7 +30,10 @@ def device_add(user, payload, params):
 
     check_unique_name(user, name)
 
-    # ToDo: Check for basic-role
+    # Make sure device-role is defined
+    if not devicetype.roles.filter_by(name='device').first():
+        raise ApiExp.DeviceRoleNotDefined
+
     # ToDo: Implement attributeValues for setting initial of meta-data
 
     new_device = Device(
