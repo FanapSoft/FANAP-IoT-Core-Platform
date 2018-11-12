@@ -136,3 +136,37 @@ def role_show(user, roleid, params):
             attributePermissions=per_list
         )
     )
+
+
+def role_update(user, data, roleid, params):
+    role = get_by_roleid_or_404(user, roleid)
+
+    # ToDo: Implement forceupdate after rolegrand for role_update
+
+    if role.name == 'device' or data.get('name', '') == 'device':
+        # Dont allow chaning device-role
+        raise ApiExp.RoleUpdateNotAllowed
+
+    if 'attributePermissions' in data:
+        devicetype = role.devicetype
+        per_dict = generate_role_dict(
+            devicetype,
+            data['attributePermissions'],
+            False)
+
+        role.permissions = per_dict
+
+    if 'description' in data:
+        role.description = data['description']
+
+    if 'name' in data:
+        new_name = data['name']
+        if new_name != role.name:
+            check_unique_role_name(user, new_name)
+            role.name = new_name
+
+    db.session.commit()
+
+    return get_ok_response_body(
+        data=dict(id=role.roleid)
+    )

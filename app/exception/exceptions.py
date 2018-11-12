@@ -15,6 +15,7 @@ MSG_DICT = {
     "MNC-M014": "کاربر پیدا نشد. لطفا دوباره تلاش کنید",
     "MNC-M119": "نقش دستگاه تعریف نشده است",
     "MNC-M120": "اسم کاربر تکراری است",
+    "MNC-M121": "نقش دستگاه قابل تغییر نیست",
     "MNC-M401": "دسترسی غیر مجاز",
 }
 
@@ -54,6 +55,9 @@ class ApiExp:
 
     class RoleExists(Exception):
         msg_id = 'MNC-M012'
+
+    class RoleUpdateNotAllowed(Exception):
+        msg_id = 'MNC-M121'
 
 
 def get_message(msg_id):

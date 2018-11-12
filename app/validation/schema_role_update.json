@@ -9,7 +9,7 @@
         "description":{
             "type":"string"
         },
-        "ForceUpdate": {
+        "forceUpdate": {
             "type":"boolean"
         },
         "attributePermissions": {
@@ -23,12 +23,10 @@
                     "permission": {
                         "type":"string",
                         "enum":[
-                            "NA",
-                            "na",
-                            "r",
+                            "N",
                             "R",
-                            "rw",
-                            "RW"
+                            "RW",
+                            "W"
                         ]
                     }
                 },

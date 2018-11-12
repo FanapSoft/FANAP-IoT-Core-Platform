@@ -9,6 +9,7 @@ from .exceptions import ErrorStatusCode
 
 default_status_code = ErrorStatusCode
 
+
 def generate_response(exception_class):
     payload = dict()
     if hasattr(exception_class, 'payload'):
@@ -19,9 +20,9 @@ def generate_response(exception_class):
         status_code = exception_class.status_code
 
     ret_dict = dict(
-        timeStamp = time.time(),
-        data = {},
-        message = _get_message_dict(exception_class.msg_id) ,
+        timeStamp=time.time(),
+        data={},
+        message=_get_message_dict(exception_class.msg_id),
         **payload
     )
 
@@ -31,9 +32,8 @@ def generate_response(exception_class):
 def _get_message_dict(msg_id):
     return dict(
         statusCode=msg_id,
-        statusText= get_message(msg_id),
+        statusText=get_message(msg_id),
     )
-
 
 
 def register_exceptions(app):
