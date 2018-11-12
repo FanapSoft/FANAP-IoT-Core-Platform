@@ -170,3 +170,16 @@ def role_update(user, data, roleid, params):
     return get_ok_response_body(
         data=dict(id=role.roleid)
     )
+
+
+def role_delete(user, roleid, params):
+    role = get_by_roleid_or_404(user, roleid)
+
+    # ToDo: Implement "forceDelete" after rolegrant for role-delete
+
+    db.session.delete(role)
+    db.session.commit()
+
+    return get_ok_response_body(
+        data=dict(id=role.roleid)
+    )
