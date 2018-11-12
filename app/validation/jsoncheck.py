@@ -12,6 +12,7 @@ _json_schema_files = dict(
     device_edit='schema_device_edit.json',
     role_add='schema_role_add.json',
     role_update='schema_role_update.json',
+    role_grant='schema_role_grant.json',
 )
 
 

@@ -13,9 +13,11 @@ MSG_DICT = {
     "MNC-M012": "این نقش برای نوع دستگاه قبلا ایجاد شده است",
     "MNC-M013": "نقش روی دستگاه در حال استفاده است",
     "MNC-M014": "کاربر پیدا نشد. لطفا دوباره تلاش کنید",
+    "MNC-M015": "نقش برای دستگاه پیدا نشد.",
     "MNC-M119": "نقش دستگاه تعریف نشده است",
     "MNC-M120": "اسم کاربر تکراری است",
-    "MNC-M121": "نقش دستگاه قابل تغییر نیست",
+    "MNC-M121": "نقش دستگاه قابل تغییر و اعطا نیست",
+    "MNC-M122": "نقش اعطا شده است",
     "MNC-M401": "دسترسی غیر مجاز",
 }
 
@@ -59,11 +61,20 @@ class ApiExp:
     class RoleExists(Exception):
         msg_id = 'MNC-M012'
 
+    class RoleForDeviceNotFound(Exception):
+        msg_id = 'MNC-M015'
+
     class RoleUpdateNotAllowed(Exception):
         msg_id = 'MNC-M121'
 
     class DeviceRoleNotDefined(Exception):
         msg_id = 'MNC-M119'
+
+    class UserNotFound(Exception):
+        msg_id = 'MNC-M014'
+
+    class RoleAlreadyGranted(Exception):
+        msg_id = 'MNC-M122'
 
 
 def get_message(msg_id):

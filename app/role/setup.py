@@ -6,6 +6,7 @@ from flask import request
 from app.validation import json_validator, check_user_token
 from .role_op import role_add, role_list
 from .role_op import role_show, role_update, role_delete
+from .role_grant import role_grant
 
 
 class Role_Add_List(Resource):
@@ -35,6 +36,16 @@ class Role_Show_Update_Delete(Resource):
         return role_delete(user, roleid, request.args)
 
 
+class Role_Grant(Resource):
+
+    @json_validator('role_grant')
+    @check_user_token
+    def post(self, user, data):
+        return role_grant(user, data, request.args)
+
+
 def connect(rest_api, endpoint):
     rest_api.add_resource(Role_Add_List, endpoint)
     rest_api.add_resource(Role_Show_Update_Delete, endpoint + '/<roleid>')
+
+    rest_api.add_resource(Role_Grant, endpoint + '/grant')

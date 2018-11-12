@@ -4,7 +4,8 @@
 4  List Role: Search for exact deviceTypeId mach when is provided
 6  Update Role: Don't allow changing basic device-role (name=device) (error MNC-M013 is used)
 7  Device Add: Define new error to prevent adding a device without basic-role (MNC-M119)
-
+8  Role Grant: Generate error when role-grant is repeated
+9  Update Role: Permission list will replace whole role permissions
 
 
 ToDo:
