@@ -10,7 +10,7 @@ class User(db.Model):
     token = db.Column(db.String(20), unique=True)
     devicetypes = db.relationship('DeviceType', backref='owner')
     devices = db.relationship('Device', backref='owner')
-    roles = db.relationship('Role', backref='owner')
+    roles = db.relationship('Role', backref='owner', lazy='dynamic')
 
     def __repr__(self):
         return '<{username} {token}>'.format(

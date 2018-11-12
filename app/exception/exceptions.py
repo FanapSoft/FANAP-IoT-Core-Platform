@@ -49,6 +49,9 @@ class ApiExp:
     class DeviceNotFound(Exception):
         msg_id = 'MNC-M008'
 
+    class RoleExists(Exception):
+        msg_id = 'MNC-M012'
+
 
 def get_message(msg_id):
     return MSG_DICT.get(msg_id, 'Unknown')

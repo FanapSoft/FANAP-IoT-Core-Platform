@@ -10,7 +10,7 @@ _json_schema_files = dict(
     devicetype='schema_devicetype_add.json',
     device='schema_device_add.json',
     device_edit='schema_device_edit.json',
-    rola_all='schema_role_add.json',
+    role_add='schema_role_add.json',
 )
 
 

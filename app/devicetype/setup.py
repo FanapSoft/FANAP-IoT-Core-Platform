@@ -33,5 +33,4 @@ class DeviceType_Show(Resource):
 
 def connect(rest_api, endpoint):
     rest_api.add_resource(DeviceType_List_Add, endpoint)
-    rest_api.add_resource(DeviceType_Show, endpoint+ '/<devicetypeid>')
-    
+    rest_api.add_resource(DeviceType_Show, endpoint + '/<devicetypeid>')

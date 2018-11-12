@@ -19,7 +19,7 @@ class Role(db.Model):
         if not self.roleid:
             self.roleid = unique_role_id()
 
-        self.permissions = []
+        self.permissions = {}
 
     @property
     def permissions(self):
