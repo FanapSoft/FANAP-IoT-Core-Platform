@@ -16,6 +16,13 @@ def check_unique_role_name(user, role_name):
         raise ApiExp.RoleExists
 
 
+def get_by_roleid_or_404(user, roleid):
+    role = Role.query.filter_by(owner=user, roleid=roleid).first()
+    if not role:
+        raise ApiExp.RoleNotFound
+    return role
+
+
 def generate_role_dict(
         devicetype,
         add_permission_list,
@@ -44,6 +51,16 @@ def generate_role_dict(
         res[name] = permission
 
     return res
+
+
+def generate_role_response_list(role):
+    return [
+        dict(
+            attributeTypeName=n,
+            permission=v
+        ) for n, v in
+        role.permissions.items()
+    ]
 
 
 def role_add(user, data, params):
@@ -103,4 +120,19 @@ def role_list(user, params):
 
     return get_ok_response_body(
         data=dict(roles=role_list)
+    )
+
+
+def role_show(user, roleid, params):
+    role = get_by_roleid_or_404(user, roleid)
+
+    per_list = generate_role_response_list(role)
+
+    return get_ok_response_body(
+        data=dict(
+            name=role.name,
+            description=role.description,
+            deviceTypeId=role.devicetype.typeid,
+            attributePermissions=per_list
+        )
     )

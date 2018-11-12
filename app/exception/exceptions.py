@@ -49,6 +49,9 @@ class ApiExp:
     class DeviceNotFound(Exception):
         msg_id = 'MNC-M008'
 
+    class RoleNotFound(Exception):
+        msg_id = 'MNC-M011'
+
     class RoleExists(Exception):
         msg_id = 'MNC-M012'
 
