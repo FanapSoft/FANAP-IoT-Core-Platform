@@ -12,7 +12,7 @@ class DeviceType(db.Model):
     description = db.Column(db.Text)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     _attributes = db.Column(db.Text)
-    devices = db.relationship('Device', backref='devicetype')
+    devices = db.relationship('Device', backref='devicetype', lazy='dynamic')
     roles = db.relationship('Role', backref='devicetype', lazy='dynamic')
 
     def __init__(self, *args, **kwargs):

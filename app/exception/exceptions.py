@@ -44,6 +44,9 @@ class ApiExp:
     class DeviceTypeNotFound(Exception):
         msg_id = 'MNC-M005'
 
+    class DeviceInUse(Exception):
+        msg_id = 'MNC-M007'
+
     class DeviceExists(Exception):
         msg_id = 'MNC-M009'
 

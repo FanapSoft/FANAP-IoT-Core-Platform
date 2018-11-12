@@ -76,7 +76,10 @@ def devicetype_delete(user, devicetypeid, params):
 
     dt = get_by_devicetypeid_or_404(user, devicetypeid)
 
-    # ToDo: Check if any device is defined for given devicetype
+    # Check if this devicetype is used by any device
+    if dt.devices.count() != 0:
+        raise ApiExp.DeviceInUse
+
     db.session.delete(dt)
     db.session.commit()
 
