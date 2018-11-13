@@ -1,0 +1,927 @@
+{
+	"version": 1,
+	"collections": [
+		{
+			"id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+			"name": "V1",
+			"description": "Test API (app mode)",
+			"order": [],
+			"folders": [
+				{
+					"id": "d1d59d80-7984-6732-213a-15241236a3e6",
+					"name": "User",
+					"description": "",
+					"order": [
+						"ad22c4ab-5646-3d54-dc55-afbf6ac92bd1",
+						"ebf9b2bf-5c59-039a-17fb-374257c3e178"
+					],
+					"folders_order": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				},
+				{
+					"id": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
+					"name": "DeviceType",
+					"description": "",
+					"order": [
+						"f2996352-ccb6-312e-d566-75cde0840284",
+						"46e80818-8668-bd88-aa98-36f4f6908964",
+						"6e0e621a-dae3-9280-eccf-02cfbec14cab",
+						"d95f84c6-f9c5-26d6-190d-cdce94f9297e"
+					],
+					"folders_order": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				},
+				{
+					"id": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"name": "Device",
+					"description": "",
+					"order": [
+						"6dc0fc2e-03df-303a-04ce-9dfe90daf36d",
+						"95647148-4d73-4fba-e9b8-819536aca289",
+						"8f46790a-4b3d-f7f1-093d-8fb66754d45f",
+						"bb27b35f-1e44-70e1-774c-53ac8cce34e4",
+						"ee0feb32-95ab-7a55-7a13-2e01cd7c6c76"
+					],
+					"folders_order": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				},
+				{
+					"id": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"name": "Role",
+					"description": "",
+					"order": [
+						"4386e5f7-cfe0-cea2-57f7-60d54fa2ed71",
+						"2e4d160e-51a3-129f-1e97-60caefcdb86a",
+						"70d23c06-976b-e030-9c95-95f1968d247e",
+						"26eab590-056c-0346-1dc1-9096386ab962",
+						"34572e26-1f6a-0fc2-f6e1-d241ec0488c8",
+						"891216d3-be4e-1855-82a4-1973228703ab"
+					],
+					"folders_order": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				},
+				{
+					"id": "e442cc7d-7fad-5f5e-3329-7cfae460860f",
+					"name": "Grant",
+					"description": "",
+					"order": [
+						"fc2dabd8-4911-cccc-0c92-122fb3ec95e7",
+						"e325570c-8068-d508-bf0f-a8d0c481694c",
+						"c3632b0a-ea68-d221-018d-3bfc8512db67"
+					],
+					"folders_order": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				}
+			],
+			"folders_order": [
+				"d1d59d80-7984-6732-213a-15241236a3e6",
+				"28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
+				"404e4867-4625-222e-f29e-6c18871afcd4",
+				"ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+				"e442cc7d-7fad-5f5e-3329-7cfae460860f"
+			],
+			"timestamp": 0,
+			"synced": true,
+			"remote_id": 0,
+			"owner": "5551413",
+			"sharedWithTeam": false,
+			"subscribed": false,
+			"remoteLink": "",
+			"remoteLinkUpdatedAt": null,
+			"public": false,
+			"createdAt": 1542120618788,
+			"updatedAt": 1542122644862,
+			"write": true,
+			"published": false,
+			"favorite": false,
+			"permissions": {},
+			"syncedPermissions": {},
+			"requests": [
+				{
+					"id": "26eab590-056c-0346-1dc1-9096386ab962",
+					"headers": "userToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/role/{{role_id}}",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122891730,
+					"name": "Show",
+					"description": "Role Show",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "2e4d160e-51a3-129f-1e97-60caefcdb86a",
+					"headers": "userToken: {{user_token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/role",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"name\":\"Role1\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\",\n\t\"description\":\"This is a test role\",\n\t\"attributePermissions\":[\n\t\t{\"attributeTypeName\":\"field-num\",\"permission\":\"RW\"}\n\t]\n}",
+					"dataMode": "raw",
+					"tests": "var jsonData = JSON.parse(responseBody);\nvar roleid = jsonData.data.id;\npostman.setEnvironmentVariable(\"role_id\", roleid);\n",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122872137,
+					"name": "Add",
+					"description": "Role Add",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "34572e26-1f6a-0fc2-f6e1-d241ec0488c8",
+					"headers": "Content-Type: application/json\nuserToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/role/{{role_id}}",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "{\n\t\"forceUpdate\":false,\n\t\"name\":\"vala kolo mola!\",\n\t\"1description\":\"\",\n\t\"attributePermissions\":[\n\t\t{\"attributeTypeName\":\"field-num\",\"permission\":\"N\"}\n\t]\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122974468,
+					"name": "Update",
+					"description": "Role Update",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "4386e5f7-cfe0-cea2-57f7-60d54fa2ed71",
+					"headers": "userToken: {{user_token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "",
+							"value": "",
+							"description": "",
+							"enabled": false
+						}
+					],
+					"url": "{{host}}/role",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"name\":\"device\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\",\n\t\"description\":\"Role for device\",\n\t\"attributePermissions\":[\n\t\t{\"attributeTypeName\":\"field-bool\",\"permission\":\"RW\"}\n\t]\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122323333,
+					"name": "Add DeviceRole",
+					"description": "Add device Role",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "46e80818-8668-bd88-aa98-36f4f6908964",
+					"name": "List",
+					"description": "List all device types",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"method": "GET",
+					"headers": "userToken: {{user_token}}",
+					"data": [],
+					"rawModeData": "",
+					"url": "{{host}}/devicetype",
+					"responses": [],
+					"pathVariableData": [],
+					"queryParams": [],
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": ""
+						}
+					],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"folder": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360"
+				},
+				{
+					"id": "6dc0fc2e-03df-303a-04ce-9dfe90daf36d",
+					"headers": "usertoken: {{user_token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/device",
+					"folder": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"name\":\"{{device_name}}\",\n\t\"label\":\"Some Pretty Name\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\"\n}",
+					"dataMode": "raw",
+					"tests": "var jsonData = JSON.parse(responseBody);\nvar did = jsonData.data.id;\nvar enc_key = jsonData.data.encryptionKey;\n\npostman.setEnvironmentVariable(\"device_id\", did);\npostman.setEnvironmentVariable(\"device_enc\", enc_key);\n",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542121162611,
+					"name": "Add",
+					"description": "Device ADD",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "6e0e621a-dae3-9280-eccf-02cfbec14cab",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/devicetype/{{devicetype_id}}",
+					"folder": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542120936516,
+					"name": "Show",
+					"description": "Show content of a device type",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "70d23c06-976b-e030-9c95-95f1968d247e",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/role",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"queryParams": [
+						{
+							"key": "name",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "deviceTypeId",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageNumber",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageSize",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						}
+					],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122872858,
+					"name": "List",
+					"description": "Role List",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "891216d3-be4e-1855-82a4-1973228703ab",
+					"headers": "userToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/role/{{role_id}}",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
+					"queryParams": [
+						{
+							"key": "forceDelete",
+							"value": "false",
+							"equals": true,
+							"description": "",
+							"enabled": false
+						}
+					],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "DELETE",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542123070232,
+					"name": "Delete",
+					"description": "Role Delete",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "8f46790a-4b3d-f7f1-093d-8fb66754d45f",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/device/{{device_id}}",
+					"folder": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122644851,
+					"name": "Show",
+					"description": "Device Show",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "95647148-4d73-4fba-e9b8-819536aca289",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/device",
+					"folder": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"queryParams": [
+						{
+							"key": "name",
+							"value": "",
+							"equals": false,
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"equals": false,
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageNumber",
+							"value": "1",
+							"equals": false,
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageSize",
+							"value": "12",
+							"equals": false,
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "isOwned",
+							"value": "",
+							"equals": false,
+							"description": "",
+							"enabled": false
+						}
+					],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "GET",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542120963217,
+					"name": "List",
+					"description": "Device Add",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "ad22c4ab-5646-3d54-dc55-afbf6ac92bd1",
+					"headers": "Content-Type: application/json\n//dfgdfg: \n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "dfgdfg",
+							"value": "",
+							"description": "",
+							"enabled": false
+						}
+					],
+					"url": "{{host}}/user/add",
+					"folder": "d1d59d80-7984-6732-213a-15241236a3e6",
+					"queryParams": [],
+					"preRequestScript": "",
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "{\n\t\"name\":\"{{user_name}}\"\n}\n",
+					"dataMode": "raw",
+					"tests": "var jsonData = JSON.parse(responseBody);\nvar usrToken = jsonData.token;\npostman.setEnvironmentVariable(\"user_token\", usrToken);\n",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542120954821,
+					"name": "User ADD",
+					"description": "",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "bb27b35f-1e44-70e1-774c-53ac8cce34e4",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/device/{{device_id}}",
+					"folder": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "DELETE",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122643059,
+					"name": "Delete",
+					"description": "Device Delete",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "c3632b0a-ea68-d221-018d-3bfc8512db67",
+					"name": "Take",
+					"description": "RoleGrant Take",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"method": "POST",
+					"headers": "usertoken: {{user_token}}\nContent-Type: application/json",
+					"dataMode": "raw",
+					"data": "{\n\t\"roleId\":\"\",\n\t\"username\":\"\",\n\t\"deviceId\":\"\"\n}",
+					"rawModeData": "{\n\t\"roleId\":\"\",\n\t\"username\":\"\",\n\t\"deviceId\":\"\"\n}",
+					"url": "{{host}}/role/take",
+					"responses": [],
+					"pathVariableData": [],
+					"queryParams": [],
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": ""
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": ""
+						}
+					],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"folder": "e442cc7d-7fad-5f5e-3329-7cfae460860f"
+				},
+				{
+					"id": "d95f84c6-f9c5-26d6-190d-cdce94f9297e",
+					"headers": "usertoken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/devicetype/{{devicetype_id}}",
+					"folder": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "DELETE",
+					"data": [],
+					"dataMode": "params",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542120937597,
+					"name": "Delete",
+					"description": "Delete a Device Type",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "e325570c-8068-d508-bf0f-a8d0c481694c",
+					"name": "List",
+					"description": "RoleGrant List",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"method": "GET",
+					"headers": "usertoken: {{user_token}}",
+					"data": [],
+					"rawModeData": "",
+					"pathVariables": {},
+					"url": "{{host}}/role/grant?",
+					"responses": [],
+					"pathVariableData": [],
+					"queryParams": [
+						{
+							"key": "deviceId",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "username",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "roleId",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "sortBy",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageNumber",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						},
+						{
+							"key": "pageSize",
+							"value": "",
+							"type": "text",
+							"description": "",
+							"enabled": false
+						}
+					],
+					"headerData": [
+						{
+							"key": "usertoken",
+							"value": "{{user_token}}",
+							"description": ""
+						}
+					],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"folder": "e442cc7d-7fad-5f5e-3329-7cfae460860f"
+				},
+				{
+					"id": "ebf9b2bf-5c59-039a-17fb-374257c3e178",
+					"name": "User List",
+					"description": "",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"method": "GET",
+					"headers": "",
+					"data": [],
+					"rawModeData": "",
+					"url": "{{host}}/user",
+					"responses": [],
+					"pathVariableData": [],
+					"queryParams": [],
+					"headerData": [],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"folder": "d1d59d80-7984-6732-213a-15241236a3e6"
+				},
+				{
+					"id": "ee0feb32-95ab-7a55-7a13-2e01cd7c6c76",
+					"headers": "Content-Type: application/json\nuserToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/device/{{device_id}}",
+					"folder": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "PUT",
+					"data": "{\n\t\"name\":\"HariHari\",\n\t\"1serialNumber\":\"\"\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542122644036,
+					"name": "Edit",
+					"description": "Device Edit",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "f2996352-ccb6-312e-d566-75cde0840284",
+					"headers": "userToken: {{user_token}}\nContent-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/devicetype",
+					"folder": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"name\":\"{{devicetype_name}}\",\n\t\"encryptionEnabled\":true,\n\t\"description\":\"This is dummy device\",\n\t\"attributeTypes\":[\n\t\t\n\t\t\t{\"name\":\"field-val\", \"type\":\"String\"},\n\t\t\t{\"name\":\"field-num\", \"type\":\"Number\"},\n\t\t\t{\"name\":\"field-bool\", \"type\":\"Boolean\"},\n\t\t\t{\"name\":\"field-enum\", \"type\":[\"Val1\", \"Val2\"]}\n\t\t\n\t]\n\t\n}",
+					"dataMode": "raw",
+					"tests": "var jsonData = JSON.parse(responseBody);\nvar dtid = jsonData.data.id;\npostman.setEnvironmentVariable(\"devicetype_id\", dtid);\n",
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542121128956,
+					"name": "Add",
+					"description": "Add a new Device Type",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
+					"id": "fc2dabd8-4911-cccc-0c92-122fb3ec95e7",
+					"name": "Add",
+					"description": "RoleGrant",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"method": "POST",
+					"headers": "userToken: {{user_token}}\nContent-Type: application/json",
+					"dataMode": "raw",
+					"data": "{\n\t\"roleId\":\"\"\n\t\"username\":\"\"\n\t\"deviceId\":\"\"\n}",
+					"rawModeData": "{\n\t\"roleId\":\"\"\n\t\"username\":\"\"\n\t\"deviceId\":\"\"\n}",
+					"url": "{{host}}/role/grant",
+					"responses": [],
+					"pathVariableData": [],
+					"queryParams": [],
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": ""
+						},
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": ""
+						}
+					],
+					"owner": "5551413",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"folder": "e442cc7d-7fad-5f5e-3329-7cfae460860f"
+				}
+			]
+		}
+	],
+	"environments": [
+		{
+			"id": "168c568c-b2da-91bd-625c-0bbaae936aee",
+			"name": "TestV1",
+			"values": [
+				{
+					"enabled": true,
+					"key": "host",
+					"value": "http://localhost:5000",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "token",
+					"value": "TK2a8f300ede724cd8",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "user_token",
+					"value": "TKe744902c40d6474a",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "user_name",
+					"value": "Abed_test",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "devicetype_name",
+					"value": "DT_1",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "devicetype_id",
+					"value": "DT9807dedcc5a64e2b",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "device_name",
+					"value": "DEV_1",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "device_id",
+					"value": "DIad6d5d22928e427d",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "device_enc",
+					"value": "5d89d0c2478546e282a6af724791acb0",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "role_id",
+					"value": "RLe4d85d8e25704b83",
+					"type": "text"
+				}
+			],
+			"team": null,
+			"timestamp": 1542122856941
+		}
+	],
+	"headerPresets": [],
+	"globals": []
+}

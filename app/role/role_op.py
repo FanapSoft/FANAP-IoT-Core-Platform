@@ -163,7 +163,7 @@ def role_update(user, data, roleid, params):
     if 'name' in data:
         new_name = data['name']
         if new_name != role.name:
-            check_unique_role_name(user, new_name)
+            check_unique_role_name(user, new_name, role.devicetype)
             role.name = new_name
 
     db.session.commit()
