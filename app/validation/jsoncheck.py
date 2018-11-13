@@ -57,7 +57,6 @@ schema_dict = create_schema_dict(_json_schema_files)
 def json_validator(schema_name):
     def decorator_wrapper_jsonvalid(func):
         def wrapper(self, *args, **kwargs):
-
             data = request.get_json(silent=True)
             if data is None:
                 raise ApiExp.Structural

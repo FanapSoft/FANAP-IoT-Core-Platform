@@ -15,6 +15,12 @@ def check_unique_rolegrant(user, grant_user, role, device):
     return rg
 
 
+def check_role_defined_for_devicetype(role, device):
+    if role.devicetype != device.devicetype:
+        raise ApiExp.RoleForDeviceNotFound
+    return True
+
+
 def role_grant(user, data, params):
 
     grant_user = get_by_username_or_404(data['username'])
@@ -27,4 +33,48 @@ def role_grant(user, data, params):
 
     check_unique_rolegrant(user, grant_user, role, device)
 
-    return dict(user=str(user), data=data, params=params, msg='role_grant')
+    # Check if role is defined for decicetype
+    check_role_defined_for_devicetype(role, device)
+
+    rg = RoleGrant(owner=user, granted_user=grant_user,
+                   role=role, device=device)
+
+    db.session.add(rg)
+    db.session.commit()
+
+    return get_ok_response_body()
+
+
+def role_grant_list(user, params):
+
+    q = RoleGrant.query.filter_by(owner=user)
+
+    if 'deviceId' in params:
+        q = q.filter(RoleGrant.device.has(deviceid=params['deviceId']))
+
+    if 'username' in params:
+        q = q.filter(RoleGrant.granted_user.has(username=params['username']))
+
+    if 'roleId' in params:
+        q = q.filter(RoleGrant.role.has(roleid=params['roleId']))
+
+    # ToDo: Implement pagination for rolegrant_list plus sortby
+
+    rolegrants = [
+        dict(
+            deviceTypeName=rg.device.devicetype.name,
+            deviceTypeId=rg.device.devicetype.typeid,
+            deviceName=rg.device.name,
+            deviceId=rg.device.deviceid,
+            roleName=rg.role.name,
+            roleId=rg.role.roleid,
+            username=rg.granted_user.username,
+            userid=rg.granted_user.username,
+        ) for rg in q.all()
+    ]
+
+    return get_ok_response_body(
+        data=dict(
+            roles=rolegrants
+        )
+    )

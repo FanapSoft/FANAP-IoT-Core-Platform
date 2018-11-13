@@ -6,10 +6,11 @@ from app import db
 from app.common import get_ok_response_body
 
 
-def check_unique_role_name(user, role_name):
+def check_unique_role_name(user, role_name, devicetype):
     role = Role.query.filter_by(
         name=role_name,
         owner=user,
+        devicetype=devicetype
     ).first()
 
     if role:
@@ -69,7 +70,7 @@ def role_add(user, data, params):
 
     name = data['name']
 
-    check_unique_role_name(user, name)
+    check_unique_role_name(user, name, devicetype)
 
     is_device_role = (name == 'device')
 
