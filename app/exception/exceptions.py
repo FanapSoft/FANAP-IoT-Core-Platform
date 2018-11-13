@@ -14,6 +14,7 @@ MSG_DICT = {
     "MNC-M013": "نقش روی دستگاه در حال استفاده است",
     "MNC-M014": "کاربر پیدا نشد. لطفا دوباره تلاش کنید",
     "MNC-M015": "نقش برای دستگاه پیدا نشد.",
+    "MNC-M017": "نقش مورد نظر به کاربر اعطا نشده است. لطفا دوباره تلاش کنید",
     "MNC-M119": "نقش دستگاه تعریف نشده است",
     "MNC-M120": "اسم کاربر تکراری است",
     "MNC-M121": "نقش دستگاه قابل تغییر و اعطا نیست",
@@ -75,6 +76,9 @@ class ApiExp:
 
     class RoleAlreadyGranted(Exception):
         msg_id = 'MNC-M122'
+
+    class RoleNotGranted(Exception):
+        msg_id = 'MNC-M017'
 
 
 def get_message(msg_id):

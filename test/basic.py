@@ -61,14 +61,19 @@ class BasicTest(unittest.TestCase):
 
         return res.json
 
-    def _add_rolegrant(self, usertoken, granted_user, role, device):
+    def _add_rolegrant(self, usertoken, granted_user, role, device, take=False):
         body = dict(
             username=granted_user,
             roleId=role,
             deviceId=device
         )
 
-        res = self.client.post('/role/grant', json=body,
+        if take:
+            ep = '/role/take'
+        else:
+            ep = '/role/grant'
+
+        res = self.client.post(ep, json=body,
                                headers=dict(userToken=usertoken))
 
         return res.json
@@ -135,9 +140,13 @@ class BasicTest(unittest.TestCase):
             self.usertoken1, self.username2, rl1_id, d11_id)
 
         x = self._get_rolegrant_list(self.usertoken1)
-        print(x)
+        print(x['data'])
 
-        print()
+        dr1 = self._add_rolegrant(
+            self.usertoken1, self.username2, rl1_id, d1_id, take=True)
+
+        x = self._get_rolegrant_list(self.usertoken1)
+        print(x['data'])
 
 
 if __name__ == '__main__':

@@ -7,6 +7,7 @@
 8  Role Grant: Generate error when role-grant is repeated
 9  Update Role: Permission list will replace whole role permissions
 10 Role Grand List: Use username as userid in return list
+11 Device Show/Edit, Role Grant: Use MNC-M008 instead of MNC-M016
 
 ToDo:
     * pagination is not supported for role-list yet

@@ -7,11 +7,24 @@ from app.role import get_by_roleid_or_404
 from app.device import get_by_deviceid_or_404
 
 
-def check_unique_rolegrant(user, grant_user, role, device):
+def get_rolegrant(user, grant_user, role, device):
     rg = RoleGrant.query.filter_by(
         owner=user, granted_user=grant_user, role=role, device=device).first()
+    return rg
+
+
+def check_unique_rolegrant(user, grant_user, role, device):
+    rg = get_rolegrant(user, grant_user, role, device)
+
     if rg:
         raise ApiExp.RoleAlreadyGranted
+
+
+def get_rolegrant_or_404(user, grant_user, role, device):
+    rg = get_rolegrant(user, grant_user, role, device)
+
+    if not rg:
+        raise ApiExp.RoleNotGranted
     return rg
 
 
@@ -78,3 +91,20 @@ def role_grant_list(user, params):
             roles=rolegrants
         )
     )
+
+
+def role_take(user, data, params):
+    grant_user = get_by_username_or_404(data['username'])
+    role = get_by_roleid_or_404(user, data['roleId'])
+    device = get_by_deviceid_or_404(user, data['deviceId'])
+
+    # Don't allow using device-role
+    if role.name == 'device':
+        raise ApiExp.RoleUpdateNotAllowed
+
+    rg = get_rolegrant_or_404(user, grant_user, role, device)
+
+    db.session.delete(rg)
+    db.session.commit()
+
+    return get_ok_response_body()
