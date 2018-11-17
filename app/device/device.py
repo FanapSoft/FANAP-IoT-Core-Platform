@@ -2,7 +2,7 @@ from app.devicetype import get_by_devicetypeid_or_404
 from app.exception import ApiExp
 from app.model import Device
 from app import db
-from app.common import get_ok_response_body
+from app.common import get_ok_response_body, paginate
 
 
 def check_unique_name(user, device_name):
@@ -64,7 +64,11 @@ def device_list(user, params):
     if 'name' in params:
         q = q.filter(Device.name.contains(params['name']))
 
-    # ToDo: Implement pagination, sort-by
+    ret = paginate(q, params, dict(
+        id=Device.deviceid,
+        name=Device.name
+    ))
+
     # ToDo: Implement Role (isOwned)
 
     dev_list = [
@@ -72,11 +76,12 @@ def device_list(user, params):
             id=x.deviceid,
             name=x.name,
             isOwned='ToDo: set me!'
-        ) for x in q.all()
+        ) for x in ret.items
     ]
 
     return get_ok_response_body(
-        data=dict(devices=dev_list)
+        data=dict(devices=dev_list),
+        pageCnt=ret.pages,
     )
 
 

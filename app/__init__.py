@@ -9,6 +9,10 @@ _db_uri = 'sqlite:///plat1.db?check_same_thread=False'
 application.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
 
 application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
+application.config['PAGE_NUM'] = 1
+application.config['PAGE_SIZE'] = 20
+
+CONFIG = application.config
 
 db = SQLAlchemy(application)
 api = Api(application)

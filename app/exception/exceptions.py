@@ -4,6 +4,7 @@ MSG_DICT = {
     "MNC-M000": "عملیات با موفقت انجام پذیرفت",
     "MNC-M001": "خطای ساختاری",
     "MNC-M002": "خطا در پارامتر‌های ارسالی، با پارامتر‌های صحیح تلاش کنید.",
+    "MNC-M003": "شماره شروع لیست بیش از تعداد کل آیتم های لیست است.",
     "MNC-M006": "نوع دستگاه تکراری است",
     "MNC-M005": "نوع دستگاه پیدا نشد. لطفا دوباره تلاش کنید",
     "MNC-M007": "نوع دستگاه در حال استفاده است",
@@ -34,6 +35,12 @@ class ApiExp:
 
     class Parameters(Exception):
         msg_id = 'MNC-M002'
+
+        def __init__(self, **args):
+            self.payload = args
+
+    class PageNumExceed(Exception):
+        msg_id = 'MNC-M003'
 
     class UserExists(Exception):
         msg_id = 'MNC-M120'

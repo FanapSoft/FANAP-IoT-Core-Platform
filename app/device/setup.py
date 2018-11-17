@@ -1,6 +1,6 @@
 from flask_restful import Resource
 from flask import request
-from app.validation import json_validator, check_user_token
+from app.validation import json_validator, check_user_token, reqparam_validate
 from .device import device_add, device_list
 from .device import device_show, device_edit, device_delete
 
@@ -14,7 +14,8 @@ class Device_Add_List(Resource):
 
     @check_user_token
     def get(self, user):
-        return device_list(user, request.args)
+        params = reqparam_validate('device_list', request.args)
+        return device_list(user, params)
 
 
 class Device_Show_Edit_Delete(Resource):

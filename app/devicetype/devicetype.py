@@ -1,6 +1,6 @@
 from app.model import DeviceType
 from app.exception import ApiExp
-from app.common import get_ok_response_body
+from app.common import get_ok_response_body, paginate
 from app import db
 
 
@@ -47,15 +47,19 @@ def devicetype_list(user, params):
         name_substr = params['name']
         q = q.filter(DeviceType.name.contains(name_substr))
 
-    # ToDo: Implement pagination
+    ret = paginate(q, params, dict(
+        id=DeviceType.typeid,
+        name=DeviceType.name
+    ))
 
     devt_list = [dict(
         id=x.typeid,
         name=x.name
-    ) for x in q.all()]
+    ) for x in ret.items]
 
     return get_ok_response_body(
-        data=dict(deviceTypes=devt_list)
+        data=dict(deviceTypes=devt_list),
+        pageCnt=ret.pages
     )
 
 

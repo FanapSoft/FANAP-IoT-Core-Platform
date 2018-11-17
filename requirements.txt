@@ -4,3 +4,4 @@ flask
 Flask-RESTful
 requests
 flask-sqlalchemy
+marshmallow
