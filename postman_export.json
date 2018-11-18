@@ -167,10 +167,10 @@
 					"method": "POST",
 					"data": "{\n\t\"name\":\"Role1\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\",\n\t\"description\":\"This is a test role\",\n\t\"attributePermissions\":[\n\t\t{\"attributeTypeName\":\"field-num\",\"permission\":\"RW\"}\n\t]\n}",
 					"dataMode": "raw",
-					"tests": "var jsonData = JSON.parse(responseBody);\nvar roleid = jsonData.data.id;\npostman.setEnvironmentVariable(\"role_id\", roleid);\n",
+					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var roleid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"role_id\", roleid);\n}",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542122872137,
+					"time": 1542521301533,
 					"name": "Add",
 					"description": "Role Add",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -235,6 +235,7 @@
 						}
 					],
 					"url": "{{host}}/role",
+					"folder": "ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
 					"queryParams": [],
 					"preRequestScript": null,
 					"pathVariables": {},
@@ -302,10 +303,10 @@
 					"method": "POST",
 					"data": "{\n\t\"name\":\"{{device_name}}\",\n\t\"label\":\"Some Pretty Name\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\"\n}",
 					"dataMode": "raw",
-					"tests": "var jsonData = JSON.parse(responseBody);\nvar did = jsonData.data.id;\nvar enc_key = jsonData.data.encryptionKey;\n\npostman.setEnvironmentVariable(\"device_id\", did);\npostman.setEnvironmentVariable(\"device_enc\", enc_key);\n",
+					"tests": "if (responseCode.code) === 200 {\n\n    var jsonData = JSON.parse(responseBody);\n    var did = jsonData.data.id;\n    var enc_key = jsonData.data.encryptionKey;\n    \n    postman.setEnvironmentVariable(\"device_id\", did);\n    postman.setEnvironmentVariable(\"device_enc\", enc_key);\n}\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542121162611,
+					"time": 1542521277413,
 					"name": "Add",
 					"description": "Device ADD",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -562,10 +563,10 @@
 					"method": "PUT",
 					"data": "{\n\t\"name\":\"{{user_name}}\"\n}\n",
 					"dataMode": "raw",
-					"tests": "var jsonData = JSON.parse(responseBody);\nvar usrToken = jsonData.token;\npostman.setEnvironmentVariable(\"user_token\", usrToken);\n",
+					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var usrToken = jsonData.token;\n    postman.setEnvironmentVariable(\"user_token\", usrToken);\n}\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542120954821,
+					"time": 1542521260972,
 					"name": "User ADD",
 					"description": "",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -809,10 +810,10 @@
 					"method": "POST",
 					"data": "{\n\t\"name\":\"{{devicetype_name}}\",\n\t\"encryptionEnabled\":true,\n\t\"description\":\"This is dummy device\",\n\t\"attributeTypes\":[\n\t\t\n\t\t\t{\"name\":\"field-val\", \"type\":\"String\"},\n\t\t\t{\"name\":\"field-num\", \"type\":\"Number\"},\n\t\t\t{\"name\":\"field-bool\", \"type\":\"Boolean\"},\n\t\t\t{\"name\":\"field-enum\", \"type\":[\"Val1\", \"Val2\"]}\n\t\t\n\t]\n\t\n}",
 					"dataMode": "raw",
-					"tests": "var jsonData = JSON.parse(responseBody);\nvar dtid = jsonData.data.id;\npostman.setEnvironmentVariable(\"devicetype_id\", dtid);\n",
+					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var dtid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"devicetype_id\", dtid);\n}",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542121128956,
+					"time": 1542521258773,
 					"name": "Add",
 					"description": "Add a new Device Type",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -872,7 +873,7 @@
 				{
 					"enabled": true,
 					"key": "user_token",
-					"value": "TKe744902c40d6474a",
+					"value": "TKfbe188ab87c24aaf",
 					"type": "text"
 				},
 				{
@@ -890,7 +891,7 @@
 				{
 					"enabled": true,
 					"key": "devicetype_id",
-					"value": "DT9807dedcc5a64e2b",
+					"value": "DTafb26f2f108440c3",
 					"type": "text"
 				},
 				{
@@ -902,24 +903,24 @@
 				{
 					"enabled": true,
 					"key": "device_id",
-					"value": "DIad6d5d22928e427d",
+					"value": "DIa1f878b7319a4563",
 					"type": "text"
 				},
 				{
 					"enabled": true,
 					"key": "device_enc",
-					"value": "5d89d0c2478546e282a6af724791acb0",
+					"value": "b91aadf2178b472fb58b5780e8b4cccf",
 					"type": "text"
 				},
 				{
 					"enabled": true,
 					"key": "role_id",
-					"value": "RLe4d85d8e25704b83",
+					"value": "RLe4aca28c035b4d34",
 					"type": "text"
 				}
 			],
 			"team": null,
-			"timestamp": 1542122856941
+			"timestamp": 1542521038244
 		}
 	],
 	"headerPresets": [],

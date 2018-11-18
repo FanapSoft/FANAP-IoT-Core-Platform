@@ -17,6 +17,10 @@ ToDo:
     * Sortby is not supported yet (for role-list )
     * ForceUpdate for role-update is not supported yet
     * ForceDelete for role-delete is not supported yet
+    * Update readme.md
+    * Add create-db script (create databse for first-time)
+    * Now database is created in app/plat1.db, place it in root folder
+      and prepare command line arguemnt for user location
 
 
 Issues:

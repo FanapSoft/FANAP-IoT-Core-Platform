@@ -18,7 +18,7 @@ git clone http://172.16.110.15/fanthings/iot-mock-rest-server.git server
 cd server
 pip3 install -r requirements.txt 
 
-python3 rest_server.py
+python3 check_server.py
 ```
 
 In winows:
@@ -31,19 +31,17 @@ git clone http://172.16.110.15/fanthings/iot-mock-rest-server.git server
 cd server
 pip install -r requirements.txt 
 
-python rest_server.py
+python check_server.py
 ```
 
 Check server logs in terminal
 
 ```console
-> python3 rest_server.py
+> python3 check_server.py
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
  * Restarting with stat
  * Debugger is active!
  * Debugger PIN: 303-480-224
-127.0.0.1 - - [15/Oct/2018 13:05:41] "POST /devicetype HTTP/1.1" 200 -
-127.0.0.1 - - [15/Oct/2018 13:07:24] "GET /devicetype HTTP/1.1" 200 -
 ....
 
 ```
