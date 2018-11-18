@@ -10,6 +10,7 @@
 11 Device Show/Edit, Role Grant: Use MNC-M008 instead of MNC-M016
 12 Start first page from 1, return "pageCnt" shows number of pages
 13 Device List: isOwned is not supported in Sortby
+14 Device Show: Only show owned devices
 
 ToDo:
     * pagination is not supported for role-list yet

@@ -1,9 +1,11 @@
 from app.devicetype import get_by_devicetypeid_or_404
 from app.exception import ApiExp
 from app.model import Device
+from app.model import RoleGrant
 from app import db
 from app.common import get_ok_response_body, paginate
 from app.common import contains_string_query
+from sqlalchemy import or_
 
 
 def check_unique_name(user, device_name):
@@ -60,7 +62,17 @@ def device_add(user, payload, params):
 
 def device_list(user, params):
 
-    q = Device.query.filter_by(owner=user)
+    condition = [(Device.owner == user),
+                 (Device.grantroles.any(RoleGrant.granted_user == user))]
+
+    if 'isOwned' in params:
+        if params['isOwned']:
+            condition = [(Device.owner == user)]
+        else:
+            condition = [(Device.grantroles.any(
+                RoleGrant.granted_user == user))]
+
+    q = Device.query.filter(or_(*condition))
 
     q = contains_string_query(q, params, 'name', Device.name)
 
@@ -69,13 +81,11 @@ def device_list(user, params):
         name=Device.name
     ))
 
-    # ToDo: Implement Role (isOwned)
-
     dev_list = [
         dict(
             id=x.deviceid,
             name=x.name,
-            isOwned='ToDo: set me!'
+            isOwned=(user == x.owner)
         ) for x in ret.items
     ]
 
