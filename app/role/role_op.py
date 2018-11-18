@@ -1,9 +1,9 @@
 
 from app.devicetype import get_by_devicetypeid_or_404
-from app.model import Role
 from app.exception import ApiExp
 from app import db
-from app.common import get_ok_response_body
+from app.model import Role, DeviceType
+from app.common import get_ok_response_body, paginate
 from app.common import contains_string_query, field_equal_query
 
 
@@ -98,14 +98,19 @@ def role_add(user, data, params):
 
 
 def role_list(user, params):
-    q = Role.query.filter_by(owner=user)
+    q = Role.query.join(Role.devicetype).filter_by(owner=user)
 
     q = contains_string_query(q, params, 'name', Role.name)
 
     q = field_equal_query(q, params, 'deviceTypeId',
                           Role.devicetype, 'typeid')
 
-    # ToDo: Implement pagination for role_list
+    ret = paginate(q, params, dict(
+        id=Role.roleid,
+        name=Role.name,
+        deviceTypeName=DeviceType.name,
+        deviceTypeId=DeviceType.typeid
+    ))
 
     role_list = [
         dict(
@@ -113,11 +118,12 @@ def role_list(user, params):
             name=x.name,
             deviceTypeName=x.devicetype.name,
             deviceTypeId=x.devicetype.typeid
-        ) for x in q.all()
+        ) for x in ret.items
     ]
 
     return get_ok_response_body(
-        data=dict(roles=role_list)
+        data=dict(roles=role_list),
+        pageCnt=ret.pages
     )
 
 
@@ -140,6 +146,7 @@ def role_update(user, data, roleid, params):
     role = get_by_roleid_or_404(user, roleid)
 
     # ToDo: Implement forceupdate after rolegrand for role_update
+    # ToDo: Accept update for device-role
 
     if role.name == 'device' or data.get('name', '') == 'device':
         # Dont allow chaning device-role

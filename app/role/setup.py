@@ -3,7 +3,7 @@
 from flask_restful import Resource
 from flask import request
 
-from app.validation import json_validator, check_user_token
+from app.validation import json_validator, check_user_token, reqparam_validate
 from .role_op import role_add, role_list
 from .role_op import role_show, role_update, role_delete
 from .role_grant import role_grant, role_grant_list
@@ -18,7 +18,8 @@ class Role_Add_List(Resource):
 
     @check_user_token
     def get(self, user):
-        return role_list(user, request.args)
+        params = reqparam_validate('role_list', request.args)
+        return role_list(user, params)
 
 
 class Role_Show_Update_Delete(Resource):
