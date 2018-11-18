@@ -47,7 +47,8 @@ class Role_Grant_List(Resource):
 
     @check_user_token
     def get(self, user):
-        return role_grant_list(user, request.args)
+        params = reqparam_validate('rolegrant_list', request.args)
+        return role_grant_list(user, params)
 
 
 class Role_Grant_Take(Resource):

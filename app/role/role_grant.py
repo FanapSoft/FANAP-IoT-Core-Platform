@@ -1,10 +1,11 @@
 from app.model import RoleGrant
 from app.exception import ApiExp
-from app.common import get_ok_response_body, field_equal_query
+from app.common import get_ok_response_body, field_equal_query, paginate
 from app import db
 from app.user import get_by_username_or_404
 from app.role import get_by_roleid_or_404
 from app.device import get_by_deviceid_or_404
+from app.model import Device, DeviceType, Role, User
 
 
 def get_rolegrant(user, grant_user, role, device):
@@ -62,6 +63,13 @@ def role_grant_list(user, params):
 
     q = RoleGrant.query.filter_by(owner=user)
 
+    q = q.join(
+        RoleGrant.role,
+        RoleGrant.granted_user,
+        RoleGrant.device,
+        Device.devicetype
+    )
+
     q = field_equal_query(q, params, 'deviceId',
                           RoleGrant.device, 'deviceid')
 
@@ -71,6 +79,12 @@ def role_grant_list(user, params):
     q = field_equal_query(q, params, 'roleId',
                           RoleGrant.role, 'roleid')
 
+    ret = paginate(q, params, dict(
+        deviceTypeName=DeviceType.name,
+        deviceName=Device.name,
+        roleName=Role.name,
+        username=User.username,
+    ))
     # ToDo: Implement pagination for rolegrant_list plus sortby
 
     rolegrants = [
@@ -83,13 +97,14 @@ def role_grant_list(user, params):
             roleId=rg.role.roleid,
             username=rg.granted_user.username,
             userid=rg.granted_user.username,
-        ) for rg in q.all()
+        ) for rg in ret.items
     ]
 
     return get_ok_response_body(
         data=dict(
             roles=rolegrants
-        )
+        ),
+        pageCnt=ret.pages
     )
 
 
