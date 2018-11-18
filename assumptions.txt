@@ -9,9 +9,14 @@
 10 Role Grand List: Use username as userid in return list
 11 Device Show/Edit, Role Grant: Use MNC-M008 instead of MNC-M016
 12 Start first page from 1, return "pageCnt" shows number of pages
+13 Device List: isOwned is not supported in Sortby
 
 ToDo:
     * pagination is not supported for role-list yet
     * Sortby is not supported yet (for role-list )
     * ForceUpdate for role-update is not supported yet
     * ForceDelete for role-delete is not supported yet
+
+
+Issues:
+    * Wired behaviour when using "_" for filtering name in XX-List operations

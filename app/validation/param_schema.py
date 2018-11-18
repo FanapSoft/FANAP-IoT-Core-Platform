@@ -13,7 +13,7 @@ class DeviceType_List(Schema):
 class Device_List(Schema):
     name = fields.String()
     isOwned = fields.Boolean()
-    sortBy = fields.String(validate=lambda x: x in ['id', 'name', 'isOwned'])
+    sortBy = fields.String(validate=lambda x: x in ['id', 'name'])  # 'isOwned'
     pageNumber = fields.Integer(default=1)
     pageSize = fields.Integer(default=20)
 

@@ -42,3 +42,18 @@ def orderby_query(q, params, field_dict):
         q = q.order_by(field_dict[field_name])
 
     return q
+
+
+def contains_string_query(q, params, param_name, field):
+    if param_name in params:
+        name_substr = params[param_name]
+        q = q.filter(field.contains(name_substr))
+    return q
+
+
+def field_equal_query(q, params, param_name, collection, fieldname):
+
+    if param_name in params:
+        d = {fieldname: params[param_name]}
+        q = q.filter(collection.has(**d))
+    return q

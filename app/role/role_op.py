@@ -4,6 +4,7 @@ from app.model import Role
 from app.exception import ApiExp
 from app import db
 from app.common import get_ok_response_body
+from app.common import contains_string_query, field_equal_query
 
 
 def check_unique_role_name(user, role_name, devicetype):
@@ -99,14 +100,10 @@ def role_add(user, data, params):
 def role_list(user, params):
     q = Role.query.filter_by(owner=user)
 
-    if 'name' in params:
-        name_substr = params['name']
-        q = q.filter(Role.name.contains(name_substr))
-        print
+    q = contains_string_query(q, params, 'name', Role.name)
 
-    if 'deviceTypeId' in params:
-        type_id = params['deviceTypeId']
-        q = q.filter(Role.devicetype.has(typeid=type_id))
+    q = field_equal_query(q, params, 'deviceTypeId',
+                          Role.devicetype, 'typeid')
 
     # ToDo: Implement pagination for role_list
 

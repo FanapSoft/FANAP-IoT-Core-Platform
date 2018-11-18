@@ -1,6 +1,7 @@
 from app.model import DeviceType
 from app.exception import ApiExp
 from app.common import get_ok_response_body, paginate
+from app.common import contains_string_query
 from app import db
 
 
@@ -43,9 +44,7 @@ def devicetype_add(user, payload, params):
 def devicetype_list(user, params):
     q = DeviceType.query.filter_by(owner=user)
 
-    if 'name' in params:
-        name_substr = params['name']
-        q = q.filter(DeviceType.name.contains(name_substr))
+    q = contains_string_query(q, params, 'name', DeviceType.name)
 
     ret = paginate(q, params, dict(
         id=DeviceType.typeid,

@@ -3,6 +3,7 @@ from app.exception import ApiExp
 from app.model import Device
 from app import db
 from app.common import get_ok_response_body, paginate
+from app.common import contains_string_query
 
 
 def check_unique_name(user, device_name):
@@ -61,8 +62,7 @@ def device_list(user, params):
 
     q = Device.query.filter_by(owner=user)
 
-    if 'name' in params:
-        q = q.filter(Device.name.contains(params['name']))
+    q = contains_string_query(q, params, 'name', Device.name)
 
     ret = paginate(q, params, dict(
         id=Device.deviceid,

@@ -1,6 +1,6 @@
 from app.model import RoleGrant
 from app.exception import ApiExp
-from app.common import get_ok_response_body
+from app.common import get_ok_response_body, field_equal_query
 from app import db
 from app.user import get_by_username_or_404
 from app.role import get_by_roleid_or_404
@@ -62,14 +62,14 @@ def role_grant_list(user, params):
 
     q = RoleGrant.query.filter_by(owner=user)
 
-    if 'deviceId' in params:
-        q = q.filter(RoleGrant.device.has(deviceid=params['deviceId']))
+    q = field_equal_query(q, params, 'deviceId',
+                          RoleGrant.device, 'deviceid')
 
-    if 'username' in params:
-        q = q.filter(RoleGrant.granted_user.has(username=params['username']))
+    q = field_equal_query(q, params, 'username',
+                          RoleGrant.granted_user, 'username')
 
-    if 'roleId' in params:
-        q = q.filter(RoleGrant.role.has(roleid=params['roleId']))
+    q = field_equal_query(q, params, 'roleId',
+                          RoleGrant.role, 'roleid')
 
     # ToDo: Implement pagination for rolegrant_list plus sortby
 
