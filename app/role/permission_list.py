@@ -65,3 +65,7 @@ class PermissionList:
             if not (self.permissions[f] & mask):
                 return False
         return True
+
+    def get_fields_with_read_permission(self):
+        mask = PermissionList.ReadBit
+        return [n for n, p in self.permissions.items() if p & mask]

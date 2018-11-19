@@ -15,6 +15,7 @@
 16 DeviceData Write/Send: Use MNC-M001 when using wrong fields (metadata/data)
 17 Requesting device read by sending "?" is not supported
 18 Use "User access denied" when user has no access for read/write one field
+19 Device owner has full access for read/write/send
 
 ToDo:
     * (DONE) pagination is not supported for role-list yet

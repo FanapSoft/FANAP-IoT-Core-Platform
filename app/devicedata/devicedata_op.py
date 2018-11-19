@@ -34,6 +34,11 @@ def check_user_write_field_access(user, device, user_field_list):
     return True
 
 
+def get_device_fields_with_read_permission(user, device):
+    pl = role_get_device_permission_dict(user, device)
+    return pl.get_fields_with_read_permission()
+
+
 def write_send_common_validate(user, data, deviceid, params, is_write):
     # Check if any device is assigned to this user:
     device = get_by_deviceid_or_404(user, deviceid, look_in_granted=True)
@@ -48,10 +53,12 @@ def write_send_common_validate(user, data, deviceid, params, is_write):
     data_fileds, metadata_fields = app.devicetype.get_devicefields_metadata(
         devicetype)
 
+    # Validate if user is writing to meta-data and sending data to the metadata
     validate_data_metadatafileds(
         metadata_fields if is_write else data_fileds,
         user_data_dict)
 
+    # Check if user (based on roles) has access to the requested fields
     check_user_write_field_access(user, device, user_data_dict.keys())
 
     return dict(msg='This is device data write',
@@ -73,7 +80,9 @@ def devicedata_read(user, deviceid, params):
     # Check if any device is assigned to this user:
     device = get_by_deviceid_or_404(user, deviceid, look_in_granted=True)
 
-    return dict(msg='This is device data read', deviceid=deviceid)
+    read_fields = get_device_fields_with_read_permission(user, device)
+
+    return dict(msg='This is device data read', fields=read_fields)
 
 
 def devicedata_send(user, data, deviceid, params):
