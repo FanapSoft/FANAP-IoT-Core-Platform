@@ -3,6 +3,7 @@ from app.exception import ApiExp
 from app.common import get_ok_response_body, paginate
 from app.common import contains_string_query
 from app import db
+from app.model import Role
 
 
 def check_unique_name(user, devicetypename):
@@ -22,6 +23,14 @@ def get_by_devicetypeid_or_404(user, devicetypeid):
     return dt
 
 
+def convert_attribute_list_to_dict(attribute_list):
+    return {x['name']: x['type'] for x in attribute_list}
+
+
+def convert_dict_to_attribute_list(attibute_dict):
+    return [dict(name=k, type=v) for k, v in attibute_dict.items()]
+
+
 def devicetype_add(user, payload, params):
     name = payload['name']
     enc = payload['encryptionEnabled']
@@ -31,7 +40,7 @@ def devicetype_add(user, payload, params):
 
     dt = DeviceType(name=name, owner=user, enc=enc, description=description)
 
-    dt.attributes = payload['attributeTypes']
+    dt.attributes = convert_attribute_list_to_dict(payload['attributeTypes'])
 
     new_devtype_id = dt.typeid
 
@@ -71,7 +80,7 @@ def devicetype_show(user, devicetypeid, params):
         encrypted=dt.enc,
         id=dt.typeid,
         description=dt.description,
-        attributeTypes=dt.attributes,
+        attributeTypes=convert_dict_to_attribute_list(dt.attributes),
     )
 
 
@@ -89,3 +98,22 @@ def devicetype_delete(user, devicetypeid, params):
     return get_ok_response_body(
         data=dict(id=devicetypeid)
     )
+
+
+def get_devicefields_metadata(devicetype):
+    device_role = Role.query.filter_by(
+        devicetype=devicetype, name='device').first()
+
+    if not device_role:
+        raise ApiExp.DeviceRoleNotDefined
+
+    permissions = device_role.permissions
+
+    data, metadata = [], []
+    for f, p in permissions.items():
+        if p == 'RW':
+            data.append(f)
+        else:
+            metadata.append(f)
+
+    return (data, metadata)

@@ -48,6 +48,9 @@ class ApiExp:
     class AccessDenied(Exception):
         msg_id = 'MNC-M401'
 
+        def __init__(self, **args):
+            self.payload = args
+
     class DeviceTypeExists(Exception):
         msg_id = 'MNC-M006'
 

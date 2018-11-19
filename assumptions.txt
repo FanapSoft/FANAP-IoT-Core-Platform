@@ -12,6 +12,9 @@
 13 Device List: isOwned is not supported in Sortby
 14 (DONE) Device Show: Only show owned devices
 15 Use error MNC-M002 when devicedata parameters are not correct (based on devicetype) 
+16 DeviceData Write/Send: Use MNC-M001 when using wrong fields (metadata/data)
+17 Requesting device read by sending "?" is not supported
+18 Use "User access denied" when user has no access for read/write one field
 
 ToDo:
     * (DONE) pagination is not supported for role-list yet
@@ -25,6 +28,7 @@ ToDo:
     * (DONE) Validate device-type fields for duplicate entries
     * Implement correct delete (delete orphan related objects)
     * Check minimum size for strings (name, role, ....)
+    * Create script for adding real-world data in database (at startup)
 
 Issues:
     * Wired behaviour when using "_" for filtering name in XX-List operations

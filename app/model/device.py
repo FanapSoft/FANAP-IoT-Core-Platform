@@ -29,7 +29,7 @@ class Device(db.Model):
             self.device_token = 'DTK'+generate_enc_key()
 
     def __repr__(self):
-        return '<Device {name}-{id}'.format(
+        return '<Device {name}-{id}>'.format(
             name=self.name,
             id=self.deviceid,
         )

@@ -6,6 +6,7 @@ from app.user import get_by_username_or_404
 from app.role import get_by_roleid_or_404
 from app.device import get_by_deviceid_or_404
 from app.model import Device, DeviceType, Role, User
+from .permission_list import PermissionList
 
 
 def get_rolegrant(user, grant_user, role, device):
@@ -123,3 +124,19 @@ def role_take(user, data, params):
     db.session.commit()
 
     return get_ok_response_body()
+
+
+# Permission dict based on all granted roles
+def role_get_device_permission_dict(user, device):
+    fields = device.devicetype.attributes.keys()
+    pl = PermissionList(fields)
+
+    if user == device.owner:
+        pl.access_all()
+    else:
+        for rg in RoleGrant.query.filter_by(
+                granted_user=user, device=device).all():
+
+            pl.or_by_permission_dict(rg.role.permissions)
+
+    return pl
