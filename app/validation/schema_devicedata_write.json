@@ -1,0 +1,31 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "DeviceData Write",
+    "type":"object",
+    "__uniqe_field_check":"attributes",
+    "properties": {
+        "attributes": {
+            "type":"array",
+            "__uniqe_field":"name",
+            "minItems":1,
+            "items": {
+                "type":"object",
+                "properties": {
+                    "name":{
+                        "type":"string"
+                    },
+                    "value": {
+                        "type":["string","boolean","number"]
+                    }
+                },
+                "required": [
+                    "name",
+                    "value"
+                ]
+            }
+        }
+    },
+    "required": [
+        "attributes"
+    ]
+}

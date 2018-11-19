@@ -22,6 +22,7 @@ import app.exception  # noqa
 import app.devicetype # noqa
 import app.device     # noqa
 import app.role       # noqa
+import app.devicedata # noqa
 
 app.exception.register_exceptions(application)
 
@@ -29,3 +30,4 @@ app.user.connect(api, '/user')
 app.devicetype.connect(api, '/devicetype')
 app.device.connect(api, '/device')
 app.role.connect(api, '/role')
+app.devicedata.connect(api, '/deviceData')

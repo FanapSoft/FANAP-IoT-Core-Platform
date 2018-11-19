@@ -2,6 +2,7 @@
     "$schema": "http://json-schema.org/schema#",
     "title": "DeviceType Add",
     "type":"object",
+    "__uniqe_field_check":"attributeTypes",
     "properties": {
         "name": {
             "type":"string"
@@ -14,6 +15,7 @@
         },
         "attributeTypes": {
             "type":"array",
+            "__uniqe_field":"name",
             "minItems":1,
             "items": {
                 "type":"object",

@@ -2,6 +2,7 @@
     "$schema": "http://json-schema.org/schema#",
     "title": "Role Update",
     "type":"object",
+    "__uniqe_field_check":"attributePermissions",
     "properties": {
         "name": {
             "type":"string"
@@ -14,6 +15,7 @@
         },
         "attributePermissions": {
             "type":"array",
+            "__uniqe_field":"attributeTypeName",
             "items": {
                 "type":"object",
                 "properties": {

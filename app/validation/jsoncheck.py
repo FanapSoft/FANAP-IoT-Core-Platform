@@ -13,6 +13,7 @@ _json_schema_files = dict(
     role_add='schema_role_add.json',
     role_update='schema_role_update.json',
     role_grant='schema_role_grant.json',
+    devicedata_write='schema_devicedata_write.json',
 )
 
 
@@ -24,15 +25,37 @@ def json_validate(schema_name, data):
     return True
 
 
+def check_uniqe_filed_in_list(schema, data):
+    _chk = schema.get('__uniqe_field_check', '')
+
+    if not _chk:
+        return (True, '')
+
+    fields_for_check = _chk if type(_chk) in [list, tuple] else [_chk]
+
+    for f in fields_for_check:
+        # Get name of field from properties.name.__uniqe_field
+        name = schema['properties'][f].get('__uniqe_field', '')
+        if not name:
+            continue
+
+        s = set()
+        for x in data[f]:
+            if x[name] in s:
+                return (False, '"{}" should be unique in "{}"'.format(name, f))
+            s.add(x[name])
+    return (True, '')
+
+
 def _validate(schema_name, data):
     schema = schema_dict[schema_name]
 
     try:
         jsonschema.validate(data, schema)
-        return (True, '')
-
     except jsonschema.ValidationError as e:
         return (False, e.message)
+
+    return check_uniqe_filed_in_list(schema, data)
 
 
 def _load_schema(filename):

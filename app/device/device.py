@@ -18,11 +18,21 @@ def check_unique_name(user, device_name):
         raise ApiExp.DeviceExists
 
 
-def get_by_deviceid_or_404(user, deviceid):
+def get_by_deviceid_or_404(user, deviceid, look_in_granted=False):
     dev = Device.query.filter_by(owner=user, deviceid=deviceid).first()
-    if not dev:
+
+    if dev:
+        return dev
+    elif not look_in_granted:
         raise ApiExp.DeviceNotFound
-    return dev
+
+    rg = RoleGrant.query.filter(RoleGrant.granted_user == user).filter(
+        RoleGrant.device.has(deviceid=deviceid)).first()
+
+    if not rg:
+        raise ApiExp.DeviceNotFound
+
+    return rg.device
 
 
 def device_add(user, payload, params):
