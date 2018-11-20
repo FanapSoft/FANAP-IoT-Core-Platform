@@ -13,6 +13,8 @@ from app.exception import ApiExp
 
 import app.devicetype
 from app.role import role_get_device_permission_dict
+from app.common import get_ok_response_body
+import app
 
 
 def convert_attribute_list_to_dict(attribute_list):
@@ -61,13 +63,12 @@ def write_send_common_validate(user, data, deviceid, params, is_write):
     # Check if user (based on roles) has access to the requested fields
     check_user_write_field_access(user, device, user_data_dict.keys())
 
-    return dict(msg='This is device data write',
-                dname=device.name,
-                dtname=devicetype.name,
-                data=user_data_dict,
-                data_fileds=data_fileds,
-                metadata_fields=metadata_fields,
-                )
+    dds = app.get_dds()
+    dds.store_data(user_data_dict, device.deviceid)
+
+    return get_ok_response_body(
+        data={}
+    )
 
 
 def devicedata_write(user, data, deviceid, params):
@@ -82,10 +83,21 @@ def devicedata_read(user, deviceid, params):
 
     read_fields = get_device_fields_with_read_permission(user, device)
 
-    return dict(msg='This is device data read', fields=read_fields)
+    dds = app.get_dds()
+    x = dds.read_data(read_fields, device.deviceid)
+
+    attributes = convert_field_dict_to_list(x)
+
+    return get_ok_response_body(
+        data=dict(attributes=attributes)
+    )
 
 
 def devicedata_send(user, data, deviceid, params):
     return write_send_common_validate(
         user, data, deviceid, params, is_write=False
     )
+
+
+def convert_field_dict_to_list(field_dict):
+    return [dict(name=f, value=v) for f, v in field_dict.items()]

@@ -5,3 +5,5 @@ Flask-RESTful
 requests
 flask-sqlalchemy
 marshmallow
+pymongo
+paho-mqtt

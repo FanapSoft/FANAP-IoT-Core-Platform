@@ -8,17 +8,37 @@
 			"order": [],
 			"folders": [
 				{
-					"id": "d1d59d80-7984-6732-213a-15241236a3e6",
-					"name": "User",
+					"id": "404e4867-4625-222e-f29e-6c18871afcd4",
+					"name": "Device",
 					"description": "",
 					"order": [
-						"ad22c4ab-5646-3d54-dc55-afbf6ac92bd1",
-						"ebf9b2bf-5c59-039a-17fb-374257c3e178"
+						"6dc0fc2e-03df-303a-04ce-9dfe90daf36d",
+						"95647148-4d73-4fba-e9b8-819536aca289",
+						"8f46790a-4b3d-f7f1-093d-8fb66754d45f",
+						"bb27b35f-1e44-70e1-774c-53ac8cce34e4",
+						"ee0feb32-95ab-7a55-7a13-2e01cd7c6c76"
 					],
 					"folders_order": [],
 					"owner": "5551413",
 					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
+				},
+				{
+					"name": "DeviceData",
+					"description": "",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"collection": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"order": [
+						"5e6cb0f0-831b-8dd2-19eb-1c0be48c07c2",
+						"9e67f1f3-2b4d-d5ce-fbe2-30784f21f095",
+						"119db12c-2e67-6799-dc02-4d02c7b976e6"
+					],
+					"owner": "5551413",
+					"folders_order": [],
+					"createdAt": 1542542005615,
+					"updatedAt": 1542542005615,
+					"id": "1d0aa726-2961-9961-1ed7-4e196bd71ffb",
 					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
 				},
 				{
@@ -38,15 +58,13 @@
 					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
 				},
 				{
-					"id": "404e4867-4625-222e-f29e-6c18871afcd4",
-					"name": "Device",
+					"id": "e442cc7d-7fad-5f5e-3329-7cfae460860f",
+					"name": "Grant",
 					"description": "",
 					"order": [
-						"6dc0fc2e-03df-303a-04ce-9dfe90daf36d",
-						"95647148-4d73-4fba-e9b8-819536aca289",
-						"8f46790a-4b3d-f7f1-093d-8fb66754d45f",
-						"bb27b35f-1e44-70e1-774c-53ac8cce34e4",
-						"ee0feb32-95ab-7a55-7a13-2e01cd7c6c76"
+						"fc2dabd8-4911-cccc-0c92-122fb3ec95e7",
+						"e325570c-8068-d508-bf0f-a8d0c481694c",
+						"c3632b0a-ea68-d221-018d-3bfc8512db67"
 					],
 					"folders_order": [],
 					"owner": "5551413",
@@ -73,13 +91,12 @@
 					"collection_id": "1cc81f80-1076-1881-25d9-cda908972fa9"
 				},
 				{
-					"id": "e442cc7d-7fad-5f5e-3329-7cfae460860f",
-					"name": "Grant",
+					"id": "d1d59d80-7984-6732-213a-15241236a3e6",
+					"name": "User",
 					"description": "",
 					"order": [
-						"fc2dabd8-4911-cccc-0c92-122fb3ec95e7",
-						"e325570c-8068-d508-bf0f-a8d0c481694c",
-						"c3632b0a-ea68-d221-018d-3bfc8512db67"
+						"ad22c4ab-5646-3d54-dc55-afbf6ac92bd1",
+						"ebf9b2bf-5c59-039a-17fb-374257c3e178"
 					],
 					"folders_order": [],
 					"owner": "5551413",
@@ -93,7 +110,8 @@
 				"28ea08b7-d7e5-aaa7-ccb2-a073c1531360",
 				"404e4867-4625-222e-f29e-6c18871afcd4",
 				"ee46bb35-5e4a-470c-fae9-dbf22dc4e153",
-				"e442cc7d-7fad-5f5e-3329-7cfae460860f"
+				"e442cc7d-7fad-5f5e-3329-7cfae460860f",
+				"1d0aa726-2961-9961-1ed7-4e196bd71ffb"
 			],
 			"timestamp": 0,
 			"synced": true,
@@ -105,13 +123,41 @@
 			"remoteLinkUpdatedAt": null,
 			"public": false,
 			"createdAt": 1542120618788,
-			"updatedAt": 1542122644862,
+			"updatedAt": 1542631906571,
 			"write": true,
 			"published": false,
 			"favorite": false,
 			"permissions": {},
 			"syncedPermissions": {},
 			"requests": [
+				{
+					"id": "119db12c-2e67-6799-dc02-4d02c7b976e6",
+					"headers": "Content-Type: application/json\n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/deviceData/todevice/{{device_id}}",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"attributes\": [ \n\t\t{\"name\":\"field-num\", \"value\":234},\n\t\t{\"name\":\"field-val\", \"value\":\"23\"},\n\t\t{\"name\":\"field-bool\", \"value\":true}\n\t]\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542631929498,
+					"name": "DeviceData Send",
+					"description": "",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
 				{
 					"id": "26eab590-056c-0346-1dc1-9096386ab962",
 					"headers": "userToken: {{user_token}}\n",
@@ -167,10 +213,10 @@
 					"method": "POST",
 					"data": "{\n\t\"name\":\"Role1\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\",\n\t\"description\":\"This is a test role\",\n\t\"attributePermissions\":[\n\t\t{\"attributeTypeName\":\"field-num\",\"permission\":\"RW\"}\n\t]\n}",
 					"dataMode": "raw",
-					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var roleid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"role_id\", roleid);\n}",
+					"tests": "if (responseCode.code === 200) {\n    var jsonData = JSON.parse(responseBody);\n    var roleid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"role_id\", roleid);\n}",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542521301533,
+					"time": 1542521971705,
 					"name": "Add",
 					"description": "Role Add",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -278,6 +324,40 @@
 					"folder": "28ea08b7-d7e5-aaa7-ccb2-a073c1531360"
 				},
 				{
+					"id": "5e6cb0f0-831b-8dd2-19eb-1c0be48c07c2",
+					"headers": "Content-Type: application/json\nuserToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"description": "",
+							"enabled": true
+						},
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/deviceData/{{device_id}}",
+					"queryParams": [],
+					"preRequestScript": null,
+					"pathVariables": {},
+					"pathVariableData": [],
+					"method": "POST",
+					"data": "{\n\t\"attributes\": [ \n\t\t{\"name\":\"field-num\", \"value\":234},\n\t\t{\"name\":\"field-val\", \"value\":\"23\"},\n\t\t{\"name\":\"field-enum\", \"value\":\"Val1\"}\n\t]\n}",
+					"dataMode": "raw",
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"time": 1542642995068,
+					"name": "DeviceData Write",
+					"description": "",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"responses": []
+				},
+				{
 					"id": "6dc0fc2e-03df-303a-04ce-9dfe90daf36d",
 					"headers": "usertoken: {{user_token}}\nContent-Type: application/json\n",
 					"headerData": [
@@ -303,10 +383,10 @@
 					"method": "POST",
 					"data": "{\n\t\"name\":\"{{device_name}}\",\n\t\"label\":\"Some Pretty Name\",\n\t\"deviceTypeId\":\"{{devicetype_id}}\"\n}",
 					"dataMode": "raw",
-					"tests": "if (responseCode.code) === 200 {\n\n    var jsonData = JSON.parse(responseBody);\n    var did = jsonData.data.id;\n    var enc_key = jsonData.data.encryptionKey;\n    \n    postman.setEnvironmentVariable(\"device_id\", did);\n    postman.setEnvironmentVariable(\"device_enc\", enc_key);\n}\n",
+					"tests": "if (responseCode.code === 200) {\n\n    var jsonData = JSON.parse(responseBody);\n    var did = jsonData.data.id;\n    var enc_key = jsonData.data.encryptionKey;\n    \n    postman.setEnvironmentVariable(\"device_id\", did);\n    postman.setEnvironmentVariable(\"device_enc\", enc_key);\n}\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542521277413,
+					"time": 1542521916448,
 					"name": "Add",
 					"description": "Device ADD",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -538,6 +618,37 @@
 					"responses": []
 				},
 				{
+					"id": "9e67f1f3-2b4d-d5ce-fbe2-30784f21f095",
+					"headers": "userToken: {{user_token}}\n",
+					"headerData": [
+						{
+							"key": "userToken",
+							"value": "{{user_token}}",
+							"description": "",
+							"enabled": true
+						}
+					],
+					"url": "{{host}}/deviceData/{{device_id}}",
+					"queryParams": [],
+					"pathVariables": {},
+					"pathVariableData": [],
+					"preRequestScript": null,
+					"method": "GET",
+					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
+					"data": null,
+					"dataMode": "params",
+					"name": "DeviceData Read",
+					"description": "",
+					"descriptionFormat": "html",
+					"time": 1542542162182,
+					"version": 2,
+					"responses": [],
+					"tests": null,
+					"currentHelper": "normal",
+					"helperAttributes": {},
+					"folder": "1d0aa726-2961-9961-1ed7-4e196bd71ffb"
+				},
+				{
 					"id": "ad22c4ab-5646-3d54-dc55-afbf6ac92bd1",
 					"headers": "Content-Type: application/json\n//dfgdfg: \n",
 					"headerData": [
@@ -561,12 +672,12 @@
 					"pathVariables": {},
 					"pathVariableData": [],
 					"method": "PUT",
-					"data": "{\n\t\"name\":\"{{user_name}}\"\n}\n",
+					"data": "{\n\t\"name\":\"{{user_name}}-1\"\n}\n",
 					"dataMode": "raw",
-					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var usrToken = jsonData.token;\n    postman.setEnvironmentVariable(\"user_token\", usrToken);\n}\n",
+					"tests": "if (responseCode.code === 200) {\n    var jsonData = JSON.parse(responseBody);\n    var usrToken = jsonData.token;\n    postman.setEnvironmentVariable(\"user_token\", usrToken);\n}\n",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542521260972,
+					"time": 1542521908367,
 					"name": "User ADD",
 					"description": "",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -808,12 +919,12 @@
 					"pathVariables": {},
 					"pathVariableData": [],
 					"method": "POST",
-					"data": "{\n\t\"name\":\"{{devicetype_name}}\",\n\t\"encryptionEnabled\":true,\n\t\"description\":\"This is dummy device\",\n\t\"attributeTypes\":[\n\t\t\n\t\t\t{\"name\":\"field-val\", \"type\":\"String\"},\n\t\t\t{\"name\":\"field-num\", \"type\":\"Number\"},\n\t\t\t{\"name\":\"field-bool\", \"type\":\"Boolean\"},\n\t\t\t{\"name\":\"field-enum\", \"type\":[\"Val1\", \"Val2\"]}\n\t\t\n\t]\n\t\n}",
+					"data": "{\n\t\"name\":\"{{devicetype_name}}-a1\",\n\t\"encryptionEnabled\":true,\n\t\"description\":\"This is dummy device\",\n\t\"attributeTypes\":[\n\t\t\n\t\t\t{\"name\":\"field-val\", \"type\":\"String\"},\n\t\t\t{\"name\":\"field-num\", \"type\":\"Number\"},\n\t\t\t{\"name\":\"field-bool\", \"type\":\"Boolean\"},\n\t\t\t{\"name\":\"field-enum\", \"type\":[\"Val1\", \"Val2\"]},\n\t\t\t{\"name\":\"field-new\", \"type\":[\"N1\", \"N2\"]}\n\t\t\n\t]\n\t\n}",
 					"dataMode": "raw",
-					"tests": "if (responseCode.code) === 200 {\n    var jsonData = JSON.parse(responseBody);\n    var dtid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"devicetype_id\", dtid);\n}",
+					"tests": "if (responseCode.code === 200) {\n    var jsonData = JSON.parse(responseBody);\n    var dtid = jsonData.data.id;\n    postman.setEnvironmentVariable(\"devicetype_id\", dtid);\n}",
 					"currentHelper": "normal",
 					"helperAttributes": {},
-					"time": 1542521258773,
+					"time": 1542698716713,
 					"name": "Add",
 					"description": "Add a new Device Type",
 					"collectionId": "1cc81f80-1076-1881-25d9-cda908972fa9",
@@ -855,6 +966,26 @@
 	],
 	"environments": [
 		{
+			"id": "094032f3-7d1f-4763-50e1-78f4a2f9016a",
+			"name": "test2",
+			"values": [
+				{
+					"enabled": true,
+					"key": "user_name",
+					"value": "AbedTest",
+					"type": "text"
+				},
+				{
+					"enabled": true,
+					"key": "user_token",
+					"value": "TKfab5ac4e63904043",
+					"type": "text"
+				}
+			],
+			"team": null,
+			"timestamp": 1542521841817
+		},
+		{
 			"id": "168c568c-b2da-91bd-625c-0bbaae936aee",
 			"name": "TestV1",
 			"values": [
@@ -873,7 +1004,7 @@
 				{
 					"enabled": true,
 					"key": "user_token",
-					"value": "TKfbe188ab87c24aaf",
+					"value": "TK70edb2ea071e4f3f",
 					"type": "text"
 				},
 				{
@@ -903,26 +1034,33 @@
 				{
 					"enabled": true,
 					"key": "device_id",
-					"value": "DIa1f878b7319a4563",
+					"value": "DI68ee3dfe816d4cfe",
 					"type": "text"
 				},
 				{
 					"enabled": true,
 					"key": "device_enc",
-					"value": "b91aadf2178b472fb58b5780e8b4cccf",
+					"value": "6ac8dc8a54214f738e803728a640f6b6",
 					"type": "text"
 				},
 				{
 					"enabled": true,
 					"key": "role_id",
-					"value": "RLe4aca28c035b4d34",
+					"value": "RL1bca7864ff2b4a29",
 					"type": "text"
 				}
 			],
-			"team": null,
-			"timestamp": 1542521038244
+			"timestamp": 1542722514025
 		}
 	],
 	"headerPresets": [],
-	"globals": []
+	"globals": [
+		{
+			"key": "host",
+			"value": "http://localhost:5000",
+			"description": "",
+			"type": "text",
+			"enabled": true
+		}
+	]
 }

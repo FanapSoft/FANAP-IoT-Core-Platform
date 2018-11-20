@@ -1,0 +1,17 @@
+{
+    "$schema": "http://json-schema.org/schema#",
+    "title": "Data From Device",
+    "type":"object",
+    "properties": {
+        "DATA": {
+            "type":"array",
+            "minItems":1,
+            "items": {
+                "type":"object"
+            }
+        }
+    },
+    "required": [
+        "DATA"
+    ]
+}
