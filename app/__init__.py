@@ -36,6 +36,7 @@ from app.deviceaccess import DeviceDataStorage, DAMqtt  # noqa
 
 dds = DeviceDataStorage(application)
 d_mqtt = DAMqtt(application, dds)
+dds.set_device_sender(d_mqtt.send_to_device)
 
 app.exception.register_exceptions(application)
 

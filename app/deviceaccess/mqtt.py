@@ -1,10 +1,10 @@
 import paho.mqtt.client
-import json
 
 
 class DAMqtt:
 
     D2P_TOPIC = 'd2p'
+    P2D_TOPIC = 'p2d'
 
     def __init__(self, app, datastore):
         self.cfg = app.config
@@ -33,17 +33,25 @@ class DAMqtt:
 
     def on_message(self, client, userdata, msg):
         # ToDo: Create log when received packet is not correct
-
         deviceid = DAMqtt.get_deviceid_from_topic(msg.topic)
         if not deviceid:
             return
 
-        msg_dict = DAMqtt.decode_message(msg.payload)
+        msg = DAMqtt.decode_message(msg.payload)
 
-        if not msg_dict:
+        if not msg:
             return
 
-        self.ds.get_device_message(msg_dict, deviceid)
+        self.ds.get_device_message(msg, deviceid)
+
+    def send_to_device(self, msg, deviceid):
+        self.client.publish(
+            DAMqtt._get_platform_to_device_topic(deviceid),
+            payload=msg)
+
+    @staticmethod
+    def _get_platform_to_device_topic(deviceid):
+        return '{}/{}'.format(deviceid, DAMqtt.P2D_TOPIC)
 
     @staticmethod
     def get_deviceid_from_topic(topic):
@@ -51,15 +59,11 @@ class DAMqtt:
 
     @staticmethod
     def decode_message(message):
-        try:
-            msg = message
-            # Message from MQTT is in byte-array format
-            if not isinstance(message, str):
-                msg = message.decode('utf-8')
 
-            msg_data = json.loads(msg)
-        except json.decoder.JSONDecodeError:
-            # ToDo: Log missed packets here
-            return None
-
-        return msg_data
+        if not isinstance(message, str):
+            try:
+                message = message.decode('utf-8')
+            except UnicodeDecodeError:
+                # ToDo: how to packets with encoding issue
+                return False
+        return message

@@ -4,6 +4,7 @@ import jsonschema
 from app.validation.devicedata_attribute import build_json_schema
 from app.validation.jsoncheck import json_validate
 from app.exception import ApiExp
+import json
 
 
 def generate_devicedata_validator(devicetype):
@@ -43,11 +44,45 @@ def validate_device_msg_list(deviceid, message_list):
     return True
 
 
-def validate_device_msg(deviceid, message):
+def dec_device_msg(deviceid, message):
+    '''Check if received message should be decrypted'''
+
+    from app.deviceaccess import dec_message
+
+    # First get device
+    device = Device.query.filter_by(deviceid=deviceid).first()
+
+    if not device:
+        return False
+
+    if not device.devicetype.enc:
+        return message
+
+    return dec_message(message, device.enc_key)
+
+
+def validate_decode_device_msg(deviceid, message):
+
+    message = dec_device_msg(deviceid, message)
+
+    if not message:
+        return False
+
+    # Here convert message from json
+    try:
+        if not isinstance(message, str):
+            message = message.decode('utf-8')
+        msg_data = json.loads(message)
+    except json.decoder.JSONDecodeError:
+        # ToDo: Log missed packets here
+        return False
 
     try:
-        json_validate('data_from_device', message)
+        json_validate('data_from_device', msg_data)
     except ApiExp.Structural:
         return False
 
-    return validate_device_msg_list(deviceid, message['DATA'])
+    if not validate_device_msg_list(deviceid, msg_data['DATA']):
+        return False
+
+    return msg_data['DATA']

@@ -33,7 +33,7 @@ def generate_role_dict(
     devicetype_attributes = devicetype.attributes
 
     # Generate attribute list
-    dt_attribute_list = [x['name'] for x in devicetype_attributes]
+    dt_attribute_list = list(devicetype_attributes.keys())
 
     # For device role inclue all fields with default value
     if is_device_role:

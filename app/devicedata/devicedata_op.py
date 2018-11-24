@@ -15,6 +15,8 @@ import app.devicetype
 from app.role import role_get_device_permission_dict
 from app.common import get_ok_response_body
 import app
+import time
+import json
 
 
 def convert_attribute_list_to_dict(attribute_list):
@@ -41,6 +43,29 @@ def get_device_fields_with_read_permission(user, device):
     return pl.get_fields_with_read_permission()
 
 
+def create_msg_for_device(device, user_data):
+
+    # ToDo: Find better location for preventing circular import
+    from app.deviceaccess import enc_message
+
+    if not isinstance(user_data, (list, tuple)):
+        user_data = [user_data]
+
+    dev_dict = dict(
+        DeviceName=device.name,
+        TimeStamp=time.time(),
+        DATA=user_data
+    )
+
+    # ToDo: Perform encryption here!
+    msg = json.dumps(dev_dict)
+
+    if device.devicetype.enc:
+        msg = enc_message(msg, device.enc_key)
+
+    return msg
+
+
 def write_send_common_validate(user, data, deviceid, params, is_write):
     # Check if any device is assigned to this user:
     device = get_by_deviceid_or_404(user, deviceid, look_in_granted=True)
@@ -65,6 +90,13 @@ def write_send_common_validate(user, data, deviceid, params, is_write):
 
     dds = app.get_dds()
     dds.store_data(user_data_dict, device.deviceid)
+
+    if not is_write:
+        # This is send-to-device operation
+        # As mongo adds '_id' to the dict new copy required
+        user_data_dict = convert_attribute_list_to_dict(data['attributes'])
+        msg = create_msg_for_device(device, user_data_dict)
+        dds.send_to_device(msg, device.deviceid)
 
     return get_ok_response_body(
         data={}

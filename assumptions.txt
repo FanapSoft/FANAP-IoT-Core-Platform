@@ -30,6 +30,7 @@ ToDo:
     * Implement correct delete (delete orphan related objects)
     * Check minimum size for strings (name, role, ....)
     * Create script for adding real-world data in database (at startup)
+    * (Done) ENC is not supported yet
 
 Issues:
     * Wired behaviour when using "_" for filtering name in XX-List operations

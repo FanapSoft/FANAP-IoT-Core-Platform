@@ -1,6 +1,6 @@
 # Device Access and Storage controll
 
-from app.devicedata import validate_device_msg
+from app.devicedata import validate_decode_device_msg
 from pymongo import MongoClient
 
 
@@ -10,12 +10,20 @@ class DeviceDataStorage:
     def __init__(self, application):
         db_client = MongoClient(application.config['DATASTORAGE_URI'])
         self.db = db_client[DeviceDataStorage.DB_NAME]
+        self.sender = None
 
-    def get_device_message(self, msg_dict, deviceid):
-        if not validate_device_msg(deviceid, msg_dict):
+    def get_device_message(self, msg, deviceid):
+
+        # msg is json data in string format
+        msg_data = validate_decode_device_msg(deviceid, msg)
+        if not msg_data:
             # 'ToDo: Generate log for message with access issue'
             return False
-        self.store_data(msg_dict['DATA'], deviceid)
+        self.store_data(msg_data, deviceid)
+
+    def send_to_device(self, msg, deviceid):
+        if self.sender:
+            self.sender(msg, deviceid)
 
     def store_data(self, data, deviceid):
         if type(data) not in [list, tuple]:
@@ -44,3 +52,6 @@ class DeviceDataStorage:
             c.find({field_name: {"$exists": True}}).hint(
                 [('$natural', -1)]).limit(1)
         )
+
+    def set_device_sender(self, sender):
+        self.sender = sender
