@@ -18,7 +18,15 @@ class CheckBasic(unittest.TestCase):
     def setUp(self):
         self.tc.clean_db()
 
-    def test_adding_devicetype(self):
+    @staticmethod
+    def _role_d2l(data):
+        return [dict(
+            attributeTypeName=n,
+            permission=v)
+            for n, v in data.items()
+        ]
+
+    def ztest_adding_devicetype(self):
 
         dt_data = dict(
             name='dt1',
@@ -86,7 +94,7 @@ class CheckBasic(unittest.TestCase):
         self.assertListEqual(ret.json['data']['deviceTypes'], [])
         # ###################################################
 
-    def test_adding_device(self):
+    def ztest_adding_device(self):
         dt_id, rl_id = self.tc.add_devicetype('dtrol', attributes=dict(
             field1='String',
             field2=['VLA1', 'VLA2'],
@@ -250,6 +258,112 @@ class CheckBasic(unittest.TestCase):
         self.assertEqual(data['name'], 'new_device-01')
         self.assertEqual(data['isOwned'], True)
         # ####################################################
+
+        # Delete inuse devicetype
+        ret = self.tc.delete('/devicetype/'+dt_id)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # ####################################################
+
+    def test_role(self):
+        # Add a devicetype
+        dt_id = self.tc.add_devicetype('dtrol1', attributes=dict(
+            field1='String',
+            field2=['VLA1', 'VLA2'],
+            field3='Number',
+            field4='Boolean'
+        ), add_role=False,
+            metadata=['field1', 'field3']
+        )
+
+        # Add a role with invalid device-id
+        ret = self.tc.post('/role', dict(
+            name='role1',
+            deviceTypeId='2342w',
+            attributePermissions=self._role_d2l(dict(field1='RW'))
+        ))
+
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Add a role with invalid attributeTypeName
+        ret = self.tc.post('/role', dict(
+            name='role1',
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(fieldXX='RW'))
+        ))
+
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        ret = self.tc.post('/role', dict(
+            name='device',
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(field1='R'))
+        ))
+
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Add a valid role
+        ret = self.tc.post('/role', dict(
+            name='role1',
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(field1='RW', field4='N'))
+        ))
+
+        self.assertEqual(ret.status_code, 200)
+        role_id = ret.json['data']['id']
+        # #########################################
+
+        # Add a role with duplicate name
+        ret = self.tc.post('/role', dict(
+            name='role1',
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(field1='RW', field4='N'))
+        ))
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        # #########################################
+
+        # Generate role list
+        ret = self.tc.get('/role')
+        self.assertEqual(ret.status_code, 200)
+
+        roles_list = ret.json['data']['roles']
+
+        self.assertEqual(ret.json['pageCnt'], 1)
+        self.assertEqual(len(roles_list), 1)
+        self.assertDictEqual(
+            roles_list[-1],
+            dict(
+                id=role_id,
+                deviceTypeId=dt_id,
+                name='role1',
+                deviceTypeName='dtrol1'
+            )
+        )
+        # #########################################
+
+        # Show role with invalid ID
+        ret = self.tc.get('/role/'+'asdfadfs')
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Show role 
+        ret = self.tc.get('/role/'+role_id)
+        self.assertEqual(ret.status_code, 200)
+        data = ret.json['data']
+
+        cmp_dict = dict(
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(field1='RW', field4='N')),
+            description='',
+            name='role1'
+        )
+
+        self.assertDictEqual(cmp_dict, data)
+        # #########################################
+
+        
 
 
 if __name__ == '__main__':
