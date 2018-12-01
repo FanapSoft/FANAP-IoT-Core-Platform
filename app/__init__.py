@@ -3,51 +3,41 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 
 
-application = Flask(__name__)
+def create_app(config={}):
+    global application, db, CONFIG, dds
+    application = Flask(__name__)
 
-_db_uri = 'sqlite:///plat1.db?check_same_thread=False'
-application.config['SQLALCHEMY_DATABASE_URI'] = _db_uri
+    application.config.from_mapping(config)
 
-application.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-application.config['PAGE_NUM'] = 1
-application.config['PAGE_SIZE'] = 20
-application.config['DATASTORAGE_URI'] = 'mongodb://localhost:27017'
+    CONFIG = application.config
 
+    db = SQLAlchemy(application)
+    api = Api(application)
 
-application.config['MQTT_HOST'] = 'localhost'
-application.config['MQTT_PORT'] = 1883
-application.config['MQTT_USR'] = ''
-application.config['MQTT_PASSWORD'] = ''
+    import app.user       # noqa
+    import app.exception  # noqa
+    import app.devicetype  # noqa
+    import app.device     # noqa
+    import app.role       # noqa
+    import app.devicedata  # noqa
 
+    from app.deviceaccess import DeviceDataStorage, DAMqtt  # noqa
 
-CONFIG = application.config
+    dds = DeviceDataStorage(application)
+    d_mqtt = DAMqtt(application, dds)
+    dds.set_device_sender(d_mqtt.send_to_device)
 
-db = SQLAlchemy(application)
-api = Api(application)
+    app.exception.register_exceptions(application)
 
-import app.user       # noqa
-import app.exception  # noqa
-import app.devicetype  # noqa
-import app.device     # noqa
-import app.role       # noqa
-import app.devicedata  # noqa
+    app.user.connect(api, '/user')
+    app.devicetype.connect(api, '/devicetype')
+    app.device.connect(api, '/device')
+    app.role.connect(api, '/role')
+    app.devicedata.connect(api, '/deviceData')
 
-from app.deviceaccess import DeviceDataStorage, DAMqtt  # noqa
+    d_mqtt.start()
 
-dds = DeviceDataStorage(application)
-d_mqtt = DAMqtt(application, dds)
-dds.set_device_sender(d_mqtt.send_to_device)
-
-app.exception.register_exceptions(application)
-
-app.user.connect(api, '/user')
-app.devicetype.connect(api, '/devicetype')
-app.device.connect(api, '/device')
-app.role.connect(api, '/role')
-app.devicedata.connect(api, '/deviceData')
-
-
-d_mqtt.start()
+    return application
 
 
 def get_dds():

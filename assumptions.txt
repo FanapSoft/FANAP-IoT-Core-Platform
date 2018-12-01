@@ -13,7 +13,7 @@
 14 (DONE) Device Show: Only show owned devices
 15 Use error MNC-M002 when devicedata parameters are not correct (based on devicetype) 
 16 DeviceData Write/Send: Use MNC-M001 when using wrong fields (metadata/data)
-17 Requesting device read by sending "?" is not supported
+17 Requesting a device read by sending "?" is not supported
 18 Use "User access denied" when user has no access for read/write one field
 19 Device owner has full access for read/write/send
 
@@ -24,13 +24,14 @@ ToDo:
     * ForceDelete for role-delete is not supported yet
     * Update readme.md
     * Add create-db script (create databse for first-time)
-    * Now database is created in app/plat1.db, place it in root folder
+    * (DONE) Now database is created in app/plat1.db, place it in root folder
       and prepare command line arguemnt for user location
     * (DONE) Validate device-type fields for duplicate entries
     * Implement correct delete (delete orphan related objects)
     * Check minimum size for strings (name, role, ....)
     * Create script for adding real-world data in database (at startup)
     * (Done) ENC is not supported yet
+    * Overwrite server configurations from os-variables
 
 Issues:
     * Wired behaviour when using "_" for filtering name in XX-List operations
