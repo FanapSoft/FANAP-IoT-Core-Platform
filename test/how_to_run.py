@@ -1,0 +1,1 @@
+coverage run --source=../app check_basic.py; coverage html
