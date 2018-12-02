@@ -32,10 +32,15 @@ class TestClient:
             self._add_test_user(test_user)
 
     def _add_test_user(self, test_user):
-        res = self.client.put('/user/add', json=dict(name=test_user))
-        assert res.status_code == 200
+        self.token = self.add_user(test_user)
 
-        self.token = res.json['token']
+    def add_user(self, user_name):
+        res = self.client.put('/user/add', json=dict(name=user_name))
+        assert res.status_code == 200
+        return res.json['token']
+
+    def get_test_user(self):
+        return ('test_user', self.token)
 
     def _ht(self, headers={}):
         if not headers:
@@ -61,7 +66,10 @@ class TestClient:
         headers = self._ht(headers)
         return self.client.delete(endpoint, headers=headers, **kwargs)
 
-    def add_devicetype(self, name, attributes={}, add_role=False, metadata=[], **kwargs):
+    def add_devicetype(
+            self, name, attributes={},
+            add_role=False, metadata=[], **kwargs):
+
         attr = [dict(name=n, type=k) for n, k in attributes.items()]
         d = dict(name=name, attributeTypes=attr, **kwargs)
 
@@ -75,24 +83,35 @@ class TestClient:
 
         if add_role:
 
-            per_list = [dict(
-                attributeTypeName=n,
-                permission='N' if n in metadata else 'RW'
-            ) for n, _ in attributes.items()
-            ]
+            per = {
+                n: 'N' if n in metadata else 'RW' for n in attributes.keys()
+            }
 
-            dtrl = dict(
-                name='device',
-                deviceTypeId=dt_id,
-                attributePermissions=per_list
-            )
+            role_id = self.add_role('device', dt_id, per)
 
-            role_ret = self.post('/role', dtrl)
-            assert role_ret.status_code == 200
-
-            return dt_id, role_ret.json['data']['id']
+            return dt_id, role_id
 
         return dt_id
+
+    def add_role(self, name, devicetype, permission_dict):
+
+        d = dict(
+            name=name,
+            deviceTypeId=devicetype,
+            attributePermissions=self._pd2l(permission_dict)
+        )
+
+        ret = self.post('/role', d)
+        assert ret.status_code == 200
+        return ret.json['data']['id']
+
+    @staticmethod
+    def _pd2l(data):
+        return [dict(
+            attributeTypeName=n,
+            permission=v)
+            for n, v in data.items()
+        ]
 
     def clean_db(self, keep_user=True):
         app.model.DeviceType.query.delete()
@@ -104,3 +123,16 @@ class TestClient:
             app.model.User.query.delete()
 
         app.db.session.commit()
+
+    def add_device(self, name, deviceid, label=""):
+        d = dict(
+            name=name,
+            deviceTypeId=deviceid,
+            label=label
+        )
+
+        ret = self.post('/device', d)
+
+        assert ret.status_code == 200
+        data = ret.json['data']
+        return (data['id'], data['encryptionKey'], data['deviceToken'])

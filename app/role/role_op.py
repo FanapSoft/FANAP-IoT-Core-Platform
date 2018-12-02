@@ -145,7 +145,7 @@ def role_show(user, roleid, params):
 def role_update(user, data, roleid, params):
     role = get_by_roleid_or_404(user, roleid)
 
-    # ToDo: Implement forceupdate after rolegrand for role_update
+    # ToDo: Implement forceupdate after rolegrant for role_update
     # ToDo: Accept update for device-role
 
     if role.name == 'device' or data.get('name', '') == 'device':

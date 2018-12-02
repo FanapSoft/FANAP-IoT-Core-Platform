@@ -35,6 +35,10 @@ def check_uniqe_filed_in_list(schema, data):
     fields_for_check = _chk if type(_chk) in [list, tuple] else [_chk]
 
     for f in fields_for_check:
+        if f not in data:
+            # Field is not persent in data, don't check it
+            continue
+
         # Get name of field from properties.name.__uniqe_field
         name = schema['properties'][f].get('__uniqe_field', '')
         if not name:

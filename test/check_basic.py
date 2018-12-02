@@ -26,7 +26,7 @@ class CheckBasic(unittest.TestCase):
             for n, v in data.items()
         ]
 
-    def ztest_adding_devicetype(self):
+    def test_adding_devicetype(self):
 
         dt_data = dict(
             name='dt1',
@@ -94,7 +94,7 @@ class CheckBasic(unittest.TestCase):
         self.assertListEqual(ret.json['data']['deviceTypes'], [])
         # ###################################################
 
-    def ztest_adding_device(self):
+    def test_adding_device(self):
         dt_id, rl_id = self.tc.add_devicetype('dtrol', attributes=dict(
             field1='String',
             field2=['VLA1', 'VLA2'],
@@ -348,7 +348,7 @@ class CheckBasic(unittest.TestCase):
         self.assertEqual(ret.status_code, ERROR_CODE)
         # #########################################
 
-        # Show role 
+        # Show role
         ret = self.tc.get('/role/'+role_id)
         self.assertEqual(ret.status_code, 200)
         data = ret.json['data']
@@ -363,7 +363,313 @@ class CheckBasic(unittest.TestCase):
         self.assertDictEqual(cmp_dict, data)
         # #########################################
 
-        
+        # Update role with invalid role-id
+        ret = self.tc.put('/role/'+role_id + 'sdfdsf', {})
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        # Update role with name='device
+        ret = self.tc.put('/role/'+role_id, dict(
+            name='device'
+        ))
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        ret = self.tc.post('/role', dict(
+            name='role2',
+            deviceTypeId=dt_id,
+            attributePermissions=self._role_d2l(dict(field2='RW', field3='N'))
+        ))
+        self.assertEqual(ret.status_code, 200)
+
+        # Rename role with duplicate name
+        ret = self.tc.put('/role/'+role_id, dict(
+            name='role2'
+        ))
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        # Check invalid attribute permissions
+        ret = self.tc.put('/role/'+role_id, dict(
+            attributePermissions=self._role_d2l(dict(field10='N'))
+        ))
+        self.assertEqual(ret.status_code, 500)
+        # #########################################
+
+        # Update role
+        ret = self.tc.put('/role/'+role_id, dict(
+            attributePermissions=self._role_d2l(dict(
+                field1='RW'
+            )),
+            description='Change it',
+            name='new role name'
+        ))
+        self.assertEqual(ret.status_code, 200)
+
+        # Check role with show
+        ret = self.tc.get('/role/'+role_id)
+        self.assertEqual(ret.status_code, 200)
+        data = ret.json['data']
+        cmp_dict = dict(
+            attributePermissions=self._role_d2l(dict(field1='RW')),
+            deviceTypeId=dt_id,
+            description='Change it',
+            name='new role name'
+        )
+        self.assertDictEqual(data, cmp_dict)
+        # #########################################
+
+        # Delete Role with invalid ID
+        ret = self.tc.delete('/role/'+role_id+'00')
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Delete Role
+        ret = self.tc.delete('/role/'+role_id)
+        self.assertEqual(ret.status_code, 200)
+
+        ret = self.tc.get('/role')
+        self.assertEqual(ret.status_code, 200)
+
+        data = ret.json['data']['roles']
+        self.assertEqual(len(data), 1)
+
+        data = data[-1]
+        self.assertNotEqual(data['id'], role_id)
+        # #########################################
+
+    def test_rolegrant(self):
+        dt_id, device_rl = self.tc.add_devicetype('dtrg', attributes=dict(
+            field1='String',
+            field2=['VLA1', 'VLA2'],
+            field3='Number',
+            field4='Boolean'
+        ), add_role=True,
+            metadata=['field1', 'field3']
+        )
+
+        dev_id, _, _ = self.tc.add_device('dev1', dt_id)
+
+        usr1_token = self.tc.add_user('user1')
+
+        role_id = self.tc.add_role('role1', dt_id, dict(
+            field1='R',
+            field2='RW',
+            field3='W',
+            field4='N',
+        ))
+
+        # Check invalid username/roleid/deviceid for grant
+        d = dict(
+            roleId=role_id,
+            username='kalam',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id + '234',
+            username='user1',
+            deviceId=dev_id
+        )
+
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id,
+            username='user1',
+            deviceId=dev_id + '23423'
+        )
+
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id + 'xx',
+            username='user1-xx',
+            deviceId=dev_id + '23423'
+        )
+
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Granting device role
+        d = dict(
+            roleId=device_rl,
+            username='user1',
+            deviceId=dev_id
+        )
+
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Granting role for invalid devicetype
+        dt_id1, device_rl1 = self.tc.add_devicetype('dtrg1', attributes=dict(
+            field1='String',
+            field2=['VLA1', 'VLA2'],
+            field3='Number',
+            field4='Boolean'
+        ), add_role=True,
+            metadata=['field1', 'field3']
+        )
+
+        role_id1 = self.tc.add_role('role1', dt_id1, dict(
+            field1='R',
+        ))
+
+        d = dict(
+            roleId=role_id1,
+            username='user1',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Adding a valid role-grant
+        d = dict(
+            roleId=role_id,
+            username='user1',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, 200)
+
+        # Check multiple granting
+        ret = self.tc.post('/role/grant', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Check if granted device is listed for user
+        ret = self.tc.get('/device', headers=dict(userToken=usr1_token))
+        self.assertEqual(ret.status_code, 200)
+        self.assertEqual(ret.json['pageCnt'], 1)
+
+        data = ret.json['data']['devices']
+
+        self.assertEqual(len(data), 1)
+
+        cmp_dict = dict(
+            name='dev1',
+            id=dev_id,
+            isOwned=False
+        )
+        self.assertDictEqual(cmp_dict, data[-1])
+        # #########################################
+
+        # Get list of role grants
+        ret = self.tc.get('/role/grant')
+        self.assertEqual(ret.status_code, 200)
+
+        body = ret.json
+        self.assertEqual(body['pageCnt'], 1)
+
+        role_list = body['data']['roles']
+        self.assertEqual(len(role_list), 1)
+
+        cmp_dict = dict(
+            roleName='role1',
+            userid='user1',
+            deviceTypeName='dtrg',
+            deviceId=dev_id,
+            username='user1',
+            deviceName='dev1',
+            deviceTypeId=dt_id,
+            roleId=role_id
+        )
+
+        self.assertDictEqual(cmp_dict, role_list[-1])
+        # #########################################
+
+        # Get lis of roles for granted user
+        ret = self.tc.get('/role/grant', headers={"userToken": usr1_token})
+        self.assertEqual(ret.status_code, 200)
+
+        body = ret.json
+        self.assertEqual(body['pageCnt'], 0)
+
+        role_list = body['data']['roles']
+        self.assertEqual(len(role_list), 0)
+        # #########################################
+
+        # Take invalid granted roleID/username/deviceid role
+        d = dict(
+            roleId=role_id,
+            username='kalam',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id + '234',
+            username='user1',
+            deviceId=dev_id
+        )
+
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id,
+            username='user1',
+            deviceId=dev_id + '23423'
+        )
+
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+
+        d = dict(
+            roleId=role_id + 'xx',
+            username='user1-xx',
+            deviceId=dev_id + '23423'
+        )
+
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Try taking device role
+        d = dict(
+            roleId=device_rl,
+            username='user1',
+            deviceId=dev_id
+        )
+
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Take granted role
+        d = dict(
+            roleId=role_id,
+            username='user1',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, 200)
+        # #########################################
+
+        # Retake granted role
+        d = dict(
+            roleId=role_id,
+            username='user1',
+            deviceId=dev_id
+        )
+        ret = self.tc.post('/role/take', d)
+        self.assertEqual(ret.status_code, ERROR_CODE)
+        # #########################################
+
+        # Check list of granted roles
+        ret = self.tc.get('/role/grant')
+        self.assertEqual(ret.status_code, 200)
+
+        body = ret.json
+        self.assertEqual(body['pageCnt'], 0)
+        role_list = body['data']['roles']
+        self.assertEqual(len(role_list), 0)
+        # #########################################
 
 
 if __name__ == '__main__':
