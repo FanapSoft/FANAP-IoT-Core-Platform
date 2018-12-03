@@ -3,6 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))
 import app  # noqa
+import mqtt_mock # noqa
 
 
 class TestClient:
@@ -14,11 +15,9 @@ class TestClient:
         config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
         config['PAGE_NUM'] = 1
         config['PAGE_SIZE'] = 20
-        config['DATASTORAGE_URI'] = 'mongodb://localhost:27017'
-        config['MQTT_HOST'] = 'localhost'
-        config['MQTT_PORT'] = 1883
-        config['MQTT_USR'] = ''
-        config['MQTT_PASSWORD'] = ''
+        config['MONGODB_FOR_DEVICE_DATA'] = False
+
+        config['MQTT_MOCK'] = mqtt_mock.MockMqtt
 
         config['DEBUG'] = False
         config['TESTING'] = True

@@ -3,6 +3,32 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_restful import Api
 
 
+def create_devicdatastorage(application):
+    use_mongo = application.config.get('MONGODB_FOR_DEVICE_DATA', False)
+
+    if use_mongo:
+        uri = application.config['DATASTORAGE_URI']
+        from app.deviceaccess.mongo_storage import MongoStorage
+        storage = MongoStorage(uri)
+    else:
+        from app.deviceaccess.sql_storage import DataModelStorage
+        storage = DataModelStorage()
+
+    from app.deviceaccess import DeviceDataStorage
+
+    return DeviceDataStorage(storage)
+
+
+def create_mqtt_client(application, storage):
+    MockMqtt = application.config.get('MQTT_MOCK', None)
+    if not MockMqtt:
+        from app.deviceaccess import DAMqtt  # noqa
+        d_mqtt = DAMqtt(application, storage)
+        return d_mqtt
+    else:
+        return MockMqtt(application, storage)
+
+
 def create_app(config={}):
     global application, db, CONFIG, dds
     application = Flask(__name__)
@@ -21,10 +47,9 @@ def create_app(config={}):
     import app.role       # noqa
     import app.devicedata  # noqa
 
-    from app.deviceaccess import DeviceDataStorage, DAMqtt  # noqa
+    dds = create_devicdatastorage(application)
 
-    dds = DeviceDataStorage(application)
-    d_mqtt = DAMqtt(application, dds)
+    d_mqtt = create_mqtt_client(application, dds)
     dds.set_device_sender(d_mqtt.send_to_device)
 
     app.exception.register_exceptions(application)
