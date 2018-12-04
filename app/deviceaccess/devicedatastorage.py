@@ -28,5 +28,8 @@ class DeviceDataStorage:
             deviceid
         )
 
+    def store_data(self, data, deviceid):
+        self.storage.store_data(data, deviceid)
+
     def set_device_sender(self, sender):
         self.sender = sender

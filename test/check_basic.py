@@ -582,7 +582,7 @@ class CheckBasic(unittest.TestCase):
         self.assertDictEqual(cmp_dict, role_list[-1])
         # #########################################
 
-        # Get lis of roles for granted user
+        # Get list of roles for granted user
         ret = self.tc.get('/role/grant', headers={"userToken": usr1_token})
         self.assertEqual(ret.status_code, 200)
 

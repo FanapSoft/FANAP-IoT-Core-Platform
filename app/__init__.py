@@ -30,7 +30,7 @@ def create_mqtt_client(application, storage):
 
 
 def create_app(config={}):
-    global application, db, CONFIG, dds
+    global application, db, CONFIG, dds, mqtt
     application = Flask(__name__)
 
     application.config.from_mapping(config)
@@ -62,8 +62,14 @@ def create_app(config={}):
 
     d_mqtt.start()
 
+    mqtt = d_mqtt
+
     return application
 
 
 def get_dds():
     return dds
+
+
+def get_mqtt():
+    return mqtt

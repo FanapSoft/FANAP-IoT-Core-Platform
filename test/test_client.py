@@ -3,7 +3,7 @@ import os
 sys.path.insert(0, os.path.abspath(
     os.path.join(os.path.dirname(__file__), '..')))
 import app  # noqa
-import mqtt_mock # noqa
+import mqtt_mock  # noqa
 
 
 class TestClient:
@@ -103,6 +103,15 @@ class TestClient:
         ret = self.post('/role', d)
         assert ret.status_code == 200
         return ret.json['data']['id']
+
+    def grant_role(self, username, deviceid, role_id):
+        d = dict(
+            roleId=role_id,
+            username=username,
+            deviceId=deviceid
+        )
+        ret = self.post('/role/grant', d)
+        assert ret.status_code == 200
 
     @staticmethod
     def _pd2l(data):
