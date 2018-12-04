@@ -25,8 +25,9 @@ if __name__ == '__main__':
     config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     config['PAGE_NUM'] = 1
     config['PAGE_SIZE'] = 20
-    config['DATASTORAGE_URI'] = 'mongodb://localhost:27017'
 
+    config['MONGODB_FOR_DEVICE_DATA'] = False
+    config['DATASTORAGE_URI'] = 'mongodb://localhost:27017'
     config['MQTT_HOST'] = 'localhost'
     config['MQTT_PORT'] = 1883
     config['MQTT_USR'] = ''
