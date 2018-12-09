@@ -182,6 +182,10 @@ def role_delete(user, roleid, params):
 
     # ToDo: Implement "forceDelete" after rolegrant for role-delete
 
+    if role.name == 'device':
+        # Dont allow deleting device role
+        raise ApiExp.RoleUpdateNotAllowed
+
     db.session.delete(role)
     db.session.commit()
 

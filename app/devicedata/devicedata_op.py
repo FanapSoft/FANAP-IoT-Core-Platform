@@ -89,9 +89,11 @@ def write_send_common_validate(user, data, deviceid, params, is_write):
     check_user_write_field_access(user, device, user_data_dict.keys())
 
     dds = app.get_dds()
-    dds.store_data(user_data_dict, device.deviceid)
 
-    if not is_write:
+    if is_write:
+        # Only store data in meta fields
+        dds.store_data(user_data_dict, device.deviceid)
+    else:
         # This is send-to-device operation
         # As mongo adds '_id' to the dict new copy required
         user_data_dict = convert_attribute_list_to_dict(data['attributes'])
