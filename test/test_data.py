@@ -176,7 +176,7 @@ class CheckDeviceData(unittest.TestCase):
             fsrt='halooo',
             fenum=None,
             fnum=345,
-            fbool=True,
+            fbool=None,
             mstr='Test',
             mnum=232,
         )
