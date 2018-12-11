@@ -1,64 +1,56 @@
 # Mock Rest Server
 
-Mock server for FNP rest API based on `FNP.PLF.PUB.SystemSpecificationIoTAPI.00`
+Python implementation of the [Fanap IOT Platform](http://doc.thingscloud.ir/v1.0.0.0/204/API).
 
+## Requirements
 
+- Python 3 (3.5 is tested)
+- MQTT Broker (device data)
 
+Optional
 
+- MongoDB for device-data storage (version 4.0 is tested)
+- Postman for evaluating rest-api (version 5.5 and 6.5.3 are tested)
 
 ## Installation (with virtualenv)
 
-In Linux terminal:
-```
-virtualenv test_mock
-cd test_mock
-source bin/activate
+```bash
+git clone PROJECT_REPOSITORY server
 
-git clone http://172.16.110.15/fanthings/iot-mock-rest-server.git server
+virtualenv env
+
+# In Linux
+source env/bin/activate
+
+# In Windows
+env\Scripts\activate.bat
+
 cd server
-pip3 install -r requirements.txt 
+pip install -r requirements.txt
 
-python3 check_server.py
-```
+# Set DB/MQTT parameters in run_server.py
 
-In winows:
-```
-virtualenv test_mock
-cd test_mock
-Scripts\activate.bat 
+python run_server.py
 
-git clone http://172.16.110.15/fanthings/iot-mock-rest-server.git server
-cd server
-pip install -r requirements.txt 
-
-python check_server.py
-```
-
-Check server logs in terminal
-
-```console
-> python3 check_server.py
+Creating default database!
+ * Serving Flask app "app" (lazy loading)
+ * Environment: production
+   WARNING: Do not use the development server in a production environment.
+   Use a production WSGI server instead.
+ * Debug mode: on
  * Running on http://0.0.0.0:5000/ (Press CTRL+C to quit)
  * Restarting with stat
  * Debugger is active!
- * Debugger PIN: 303-480-224
-....
-
+ * Debugger PIN: 324-763-485
+ .....
 ```
+
 
 ## Usage
-Use [Postman](https://www.getpostman.com/) for testing the api!
+
+[Postman](https://www.getpostman.com/) can be used for evaluating the API.
+`postman_export.json` can be used as an example workspace in postman.
+
 
 ![Add devicetype](postman1.png)
-![Show devicetype list](postman2.png)
-
-## Run tests
-Tests are placed in `/test` directory. Set `HOST` and `TOKEN` in `/test/test.py`
-for running test. You can add a test-user using `add_testuser.py` script.
-
-```console
-> python add_testuser.py
-
-User TESTUSER added!. Token="token-TESTUSER"
-
-```
+![Add Device](postman2.png)

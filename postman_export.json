@@ -554,7 +554,6 @@
 							"script": {
 								"id": "fbae79e6-91bc-4354-8a17-389ffe55476d",
 								"exec": [
-									"console.log(pm.getEnvironmentVariable(\"kalam\"));"
 								],
 								"type": "text/javascript"
 							}

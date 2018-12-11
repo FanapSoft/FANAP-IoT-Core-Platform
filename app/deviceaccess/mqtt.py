@@ -29,7 +29,7 @@ class DAMqtt:
         self.client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
-        client.subscribe('+/' + DAMqtt.D2P_TOPIC)
+        client.subscribe('/+/' + DAMqtt.D2P_TOPIC)
 
     def on_message(self, client, userdata, msg):
         # ToDo: Create log when received packet is not correct
@@ -51,7 +51,7 @@ class DAMqtt:
 
     @staticmethod
     def _get_platform_to_device_topic(deviceid):
-        return '{}/{}'.format(deviceid, DAMqtt.P2D_TOPIC)
+        return '/{}/{}'.format(deviceid, DAMqtt.P2D_TOPIC)
 
     @staticmethod
     def get_deviceid_from_topic(topic):

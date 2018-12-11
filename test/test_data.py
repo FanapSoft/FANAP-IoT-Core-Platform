@@ -34,7 +34,7 @@ class CheckDeviceData(unittest.TestCase):
     @staticmethod
     def send_data_to_device(data_dic, device_id):
         msg = json.dumps(dict(
-            DATA=[data_dic]
+            data=[data_dic]
         ))
         mqtt = app.get_mqtt()
         mqtt.receive_from_device(msg, device_id)
@@ -158,7 +158,7 @@ class CheckDeviceData(unittest.TestCase):
         msg_dict = json.loads(data['msg'])
 
         self.assertListEqual(
-            msg_dict['DATA'],
+            msg_dict['data'],
             [dict(fnum=980, fbool=True)]
         )
         # ###################################################

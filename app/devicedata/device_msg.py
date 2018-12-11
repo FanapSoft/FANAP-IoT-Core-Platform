@@ -82,7 +82,7 @@ def validate_decode_device_msg(deviceid, message):
     except ApiExp.Structural:
         return False
 
-    if not validate_device_msg_list(deviceid, msg_data['DATA']):
+    if not validate_device_msg_list(deviceid, msg_data['data']):
         return False
 
-    return msg_data['DATA']
+    return msg_data['data']

@@ -54,7 +54,7 @@ def create_msg_for_device(device, user_data):
     dev_dict = dict(
         DeviceName=device.name,
         TimeStamp=time.time(),
-        DATA=user_data
+        data=user_data
     )
 
     # ToDo: Perform encryption here!
