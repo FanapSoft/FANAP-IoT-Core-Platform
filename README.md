@@ -1,4 +1,4 @@
-# Mock Rest Server
+# FANAP IoT Core Platform
 
 Python implementation of the [Fanap IOT Platform](http://doc.thingscloud.ir/v1.0.0.0/204/API).
 
