@@ -34,17 +34,18 @@ def create_db():
     app.db.create_all()
 
 
+config = create_config_dict()
+
+application = app.create_app(config)
+
+if 'create_db' in sys.argv:
+    create_db()
+    exit(0)
+
+if not os.path.isfile(DB_FILE):
+    create_db()
+
+
 if __name__ == '__main__':
-
-    config = create_config_dict()
-
-    application = app.create_app(config)
-
-    if 'create_db' in sys.argv:
-        create_db()
-        exit(0)
-
-    if not os.path.isfile(DB_FILE):
-        create_db()
 
     application.run(debug=True, host='0.0.0.0')
