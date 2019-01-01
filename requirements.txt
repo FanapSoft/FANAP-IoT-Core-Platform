@@ -6,4 +6,4 @@ marshmallow==2.16.3
 pymongo==3.7.2
 paho_mqtt==1.4.0
 pyDes==2.0.1
-environs=4.1.0
+environs==4.1.0
