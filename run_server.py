@@ -31,6 +31,7 @@ def create_config_dict():
 
 
 def create_db():
+    print('Create database!')
     app.db.create_all()
 
 
@@ -41,9 +42,6 @@ application = app.create_app(config)
 if 'create_db' in sys.argv:
     create_db()
     exit(0)
-
-if not os.path.isfile(DB_FILE):
-    create_db()
 
 
 if __name__ == '__main__':

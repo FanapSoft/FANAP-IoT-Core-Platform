@@ -8,3 +8,4 @@ htmlcov/
 test/.coverage
 test/htmlcov/
 tmp/
+data/

@@ -54,3 +54,20 @@ Creating default database!
 
 ![Add devicetype](postman1.png)
 ![Add Device](postman2.png)
+
+## Deployment
+
+Example for Docker based deployment is provided. This setup uses PostgreSQL instead of
+SQLite.
+
+### Required tools
+
+ - docker (version 18.09.0 is tested)
+ - docker-compose (version 1.23.2 is tested)
+
+### How to run
+
+```bash
+docker-compose build
+docker-compose up
+```

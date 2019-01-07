@@ -8,16 +8,37 @@ services:
     ports:
       - 1883:1883
     restart: unless-stopped
-  
+
+  # adminer:
+  #   image: adminer:4.7
+  #   container_name: adminer
+  #   restart: always
+  #   ports:
+  #     - 8080:8080
+  #   depends_on: 
+  #     - dbpostgres
+
+
+  dbpostgres:
+    image: postgres:11.1-alpine
+    container_name: postgresdb
+    restart: always
+    environment: 
+      - POSTGRES_PASSWORD=VerySecretPassword
+      - POSTGRES_USER=platusr
+      - POSTGRES_DB=platdb
+    volumes:
+      - ./data/plat/postgres/data:/var/lib/postgresql/data
+
   mongodb:
     image: mongo
     container_name: mongodb
     environment: 
       - MONGO_LOG_DIR=/dev/null
     volumes: 
-      - ./devicedata/db:/data/db
-    ports:
-      - 27017:27017
+      - ./data/device/mongo/db:/data/db
+    # ports:
+    #   - 27017:27017
     command: mongod --smallfiles --logpath=/dev/null 
 
   platform:
@@ -29,8 +50,14 @@ services:
       - MQTT_HOST=mqtt
       - MONGODB_FOR_DEVICE_DATA=True
       - DATASTORAGE_URI=mongodb://mongodb:27017
+      - SQLALCHEMY_DATABASE_URI=postgresql://platusr:VerySecretPassword@dbpostgres/platdb
     depends_on: 
       - mqtt
       - mongodb
+      - dbpostgres
     volumes:
       - .:/app
+    entrypoint: 
+      - /bin/sh
+      - entrypoint.sh
+
