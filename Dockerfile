@@ -2,6 +2,7 @@ FROM python:3.7-alpine
 COPY requirements.txt /
 RUN pip install gunicorn
 RUN pip install -r /requirements.txt
+RUN apk update
 RUN apk add libpq
 RUN apk add --no-cache --virtual .build-deps \
     gcc \
