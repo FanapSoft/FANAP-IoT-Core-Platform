@@ -27,6 +27,7 @@ def create_config_dict():
         ('MQTT_PORT', 1883, 'int'),
         ('MQTT_USR',),
         ('MQTT_PASSWORD',),
+        ('PROPAGATE_EXCEPTIONS', True, 'bool'),
     ])
 
 
