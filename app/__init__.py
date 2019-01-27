@@ -46,12 +46,14 @@ def create_app(config={}):
     import app.device     # noqa
     import app.role       # noqa
     import app.devicedata  # noqa
+    import app.authentication #noqa
 
     dds = create_devicdatastorage(application)
 
     d_mqtt = create_mqtt_client(application, dds)
     dds.set_device_sender(d_mqtt.send_to_device)
-
+    app.authentication.setup(application.config)
+    
     app.exception.register_exceptions(application)
 
     app.user.connect(api, '/user')

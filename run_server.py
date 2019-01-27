@@ -28,6 +28,10 @@ def create_config_dict():
         ('MQTT_USR',),
         ('MQTT_PASSWORD',),
         ('PROPAGATE_EXCEPTIONS', True, 'bool'),
+        ('SSO_URL', 'https://accounts.pod.land'),
+        ('SSO_CLIENT_ID', 'SET_CLIENT_ID'),
+        ('SSO_CLIENT_SECRET', 'SET_CLIENT_SECRET'),
+        ('HOST_URL', 'http://localhost:5000'),
     ])
 
 

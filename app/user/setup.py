@@ -2,20 +2,18 @@
 
 from flask_restful import Resource
 from app.validation import json_validator
-from .impl import user_list, user_add
+from .podtoken import userlogin, callback
 
+from flask import request
 
-class Access_User_List(Resource):
+class GetToken(Resource):
     def get(self):
-        return user_list()
+        return userlogin()
 
-
-class Access_User_Add(Resource):
-    @json_validator('user')
-    def put(self, data):
-        return user_add(data)
-
+class CallBack(Resource):
+    def get(self):
+        return callback(request.args)
 
 def connect(rest_api, endpoint):
-    rest_api.add_resource(Access_User_List, endpoint)
-    rest_api.add_resource(Access_User_Add, endpoint + '/add')
+    rest_api.add_resource(GetToken, endpoint + '/token')
+    rest_api.add_resource(CallBack, endpoint + '/callback')
