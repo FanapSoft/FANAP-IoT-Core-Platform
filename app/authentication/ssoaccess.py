@@ -34,3 +34,14 @@ def sso_fetch_token(client_id, client_secret, code, redirect_uri, sso_address):
     res = requests.post(server, headers=headers, params=params)
 
     return (res.status_code, res.json())
+
+
+def sso_get_user_profile(token, sso_address):
+    url = urllib.parse.urljoin(sso_address, '/users')
+    headers = dict(
+        Authorization = "Bearer {token}".format(token=token)
+    )
+
+    res = requests.get(url, headers=headers)
+
+    return res.status_code, res.json()

@@ -1,5 +1,5 @@
 import urllib.parse
-from .ssoaccess import sso_authorize_url, sso_token_info, sso_fetch_token
+from .ssoaccess import sso_authorize_url, sso_token_info, sso_fetch_token, sso_get_user_profile
 
 _config = dict(
     client_id='UNSET_CLIENT_ID',
@@ -58,3 +58,13 @@ def fetch_token_for_user(code):
     return token
 
 
+def get_user_profile(user_token):
+    status, profile = sso_get_user_profile(
+        user_token,
+        _config['sso_url']
+    )
+
+    if status != 200:
+        return None
+    
+    return profile
