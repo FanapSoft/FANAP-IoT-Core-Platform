@@ -53,9 +53,7 @@ def fetch_token_for_user(code):
     if status != 200:
         return None
     
-    token = token_data['access_token']
-
-    return token
+    return token_data
 
 
 def get_user_profile(user_token):
@@ -68,3 +66,6 @@ def get_user_profile(user_token):
         return None
     
     return profile
+
+def get_config_dict():
+    return _config

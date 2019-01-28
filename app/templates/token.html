@@ -1,6 +1,86 @@
 <!DOCTYPE html>
 <html>
+    <header>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+        <script>
+            {% autoescape false %}
+            let client_id = "{{client_id}}";
+            let client_secret = "{{client_secret}}";
+            let refresh_token = "{{refresh_token}}";
+            let token = "{{token}}";
+            let sso_url = "{{sso_url}}";
+            let expires_in = {{expires_in}};
+            let timer_id = -1;
+            {% endautoescape %}
+        </script>
+        <script>
+            $(function(){
+                show_access_token();
+
+                $("#newtoken").click(function(){
+                    request_token(refresh_token);
+                });
+
+                $("#copytoken").click(function(){
+                    $("#tokentext").select();
+                    document.execCommand("copy");
+                });
+                
+            });
+
+            function request_token(ref_token) {
+                $.ajax({
+                    type: 'POST',
+                    url: `${sso_url}?grant_type=refresh_token&refresh_token=${ref_token}&client_id=${client_id}&client_secret=${client_secret}`,
+                    headers: {
+                        "Content-Type": "application/x-www-form-urlencoded",
+                    },
+                    success: process_received_token
+                });
+            }
+
+            function process_received_token(data) {
+                console.info("New token: ", data);
+
+                refresh_token = data.refresh_token;
+                token = data.access_token;
+                expires_in = data.expires_in;
+
+                show_access_token();
+            }
+
+            function show_access_token() {
+                setup_counter();
+                $("#tokentext")[0].value = token;
+            }
+
+            function setup_counter() {
+                clearInterval(timer_id);
+                let expire_time = new Date();
+                expire_time.setSeconds(expire_time.getSeconds() + expires_in);
+                // expire_time.toLocaleTimeString 
+                timer_id = setInterval(() => {
+                    expires_in = expires_in-1;
+                    $("#expire_info").text(
+                        "Token expires at " +  expire_time.toLocaleTimeString() + "(" + expires_in + " sec)."
+                    );
+
+                    if (expires_in<=10) {
+                        clearInterval(timer_id);
+                        request_token(refresh_token);
+                    }
+                }, 1000);
+            }
+
+        </script>
+    </header>
 <body>
-    <h1>Token={{token}}</h1>
+
+    <label for="tokentext">Token:</label>
+    <input type="text" id="tokentext", name="token", size=30>
+    <input type="button" id="copytoken", name="copytoken", value="Copy">
+    <input type="button" id="newtoken", name="newtoken", value="New">
+    <br>
+    <p id="expire_info"> ... </p>
 </body>
 </html>
