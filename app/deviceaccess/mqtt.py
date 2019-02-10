@@ -20,6 +20,7 @@ class DAMqtt:
         port = self.cfg.get('MQTT_PORT',  1883)
         user = self.cfg.get('MQTT_USR', '')
         password = self.cfg.get('MQTT_PASSWORD', '')
+        self.use_shared_sub = self.cfg.get('MQTT_EMQ_SHARED_SUB', False)
 
         if user:
             self.client.username_pw_set(user, password)
@@ -29,7 +30,12 @@ class DAMqtt:
         self.client.loop_start()
 
     def on_connect(self, client, userdata, flags, rc):
-        client.subscribe('/+/' + DAMqtt.D2P_TOPIC)
+        topic = '/+/' + DAMqtt.D2P_TOPIC
+        if self.use_shared_sub:
+            # Using emqttd as broker. Check https://emqttd-docs.readthedocs.io/en/latest/advanced.html
+            topic = '$queue/' + topic
+
+        client.subscribe(topic)
 
     def on_message(self, client, userdata, msg):
         # ToDo: Create log when received packet is not correct

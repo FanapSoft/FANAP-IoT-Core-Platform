@@ -27,6 +27,7 @@ def create_config_dict():
         ('MQTT_PORT', 1883, 'int'),
         ('MQTT_USR',),
         ('MQTT_PASSWORD',),
+        ('MQTT_EMQ_SHARED_SUB', False, 'bool'),
         ('PROPAGATE_EXCEPTIONS', True, 'bool'),
         ('SSO_URL', 'https://accounts.pod.land'),
         ('SSO_CLIENT_ID', 'SET_CLIENT_ID'),

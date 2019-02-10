@@ -1,13 +1,22 @@
 version: '3'
 services: 
   mqtt:
-    image: eclipse-mosquitto
+    image: sneck/emqttd
     container_name: mqtt
     expose:
       - ${PLAT_MQTT_PORT}
     ports:
       - ${PLAT_MQTT_PORT}:1883
     restart: unless-stopped
+
+  # mqtt:
+  #   image: eclipse-mosquitto
+  #   container_name: mqtt
+  #   expose:
+  #     - ${PLAT_MQTT_PORT}
+  #   ports:
+  #     - ${PLAT_MQTT_PORT}:1883
+  #   restart: unless-stopped
 
   adminer:
     image: adminer:4.7
@@ -74,6 +83,7 @@ services:
       - ${PLAT_PORT}:5000
     environment: 
       - MQTT_HOST=mqtt
+      - MQTT_EMQ_SHARED_SUB=True
       - MONGODB_FOR_DEVICE_DATA=True
       - DATASTORAGE_URI=mongodb://${PLAT_MONGO_USER}:${PLAT_MONGO_PASSWORD}@mongodb:27017
       - SQLALCHEMY_DATABASE_URI=postgresql://${PLAT_POSTGRES_USER}:${PLAT_POSTGRES_PASSWORD}@dbpostgres/platdb
