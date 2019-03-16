@@ -33,6 +33,9 @@ def create_config_dict():
         ('SSO_CLIENT_ID', 'SET_CLIENT_ID'),
         ('SSO_CLIENT_SECRET', 'SET_CLIENT_SECRET'),
         ('HOST_URL', 'http://localhost:5000'),
+        ('REDIS_URL', 'localhost'),
+        ('REDIS_PORT', 6379, 'int'),
+        ('USE_TOKEN_CACHE', False, 'bool'),
     ])
 
 

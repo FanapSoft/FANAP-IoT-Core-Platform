@@ -8,4 +8,4 @@ paho_mqtt==1.4.0
 pyDes==2.0.1
 environs==4.1.0
 requests==2.21.0
-
+redis==3.2.1

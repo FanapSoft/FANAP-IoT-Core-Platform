@@ -18,6 +18,10 @@ services:
   #     - ${PLAT_MQTT_PORT}:1883
   #   restart: unless-stopped
 
+  redis:
+    image: redis:5-alpine
+    container_name: cache
+
   adminer:
     image: adminer:4.7
     container_name: adminer
@@ -71,7 +75,8 @@ services:
       - mqtt
       - mongodb
       - dbpostgres
-    command: mqtt:${PLAT_MQTT_PORT} mongodb:27017 dbpostgres:5432
+      - redis
+    command: mqtt:${PLAT_MQTT_PORT} mongodb:27017 dbpostgres:5432 redis:6379
     environment:
       - SLEEP_LENGTH=1
       - TIMEOUT_LENGTH=65
@@ -91,6 +96,9 @@ services:
       - SSO_CLIENT_SECRET=${PLAT_SSO_CLIENT_SECRET}
       - HOST_URL=${PLAT_HOST}:${PLAT_PORT}
       - SSO_URL=${PLAT_SSO_ADDR}
+      - REDIS_URL=redis
+      - REDIS_PORT=6379
+      - USE_TOKEN_CACHE=True
     depends_on: 
       - check_dependencies
     volumes:
