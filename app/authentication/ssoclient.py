@@ -49,7 +49,6 @@ def _cache_store_tokendata(user_token, token_data, cache_client):
         store_data = dict(active=int(token_data['active']), sub=token_data['sub'])
         cache_client.hmset(user_token, store_data)
         ex_time = int(token_data['exp']-time.time())
-        ex_time = int(ex_time/100)
         cache_client.expire(user_token, ex_time)
         return store_data
     return None
