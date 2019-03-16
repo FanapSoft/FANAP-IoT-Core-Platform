@@ -27,8 +27,6 @@ def setup(app_config):
         cache_client=cache_client,
     )
 
-    print(_config['cache_client'])
-
 
 def get_user_authorize_url():
     return sso_authorize_url(
