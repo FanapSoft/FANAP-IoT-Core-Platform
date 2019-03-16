@@ -7,7 +7,7 @@ from app.exception import ApiExp
 
 def get_ok_response_body(**kwargs):
     return dict(
-        timestamp=time.time(),
+        timestamp=int(time.time()),
         message=get_ok_message_dict(),
         **kwargs,
     )

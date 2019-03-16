@@ -20,7 +20,7 @@ def generate_response(exception_class):
         status_code = exception_class.status_code
 
     ret_dict = dict(
-        timeStamp=time.time(),
+        timeStamp=int(time.time()),
         data={},
         message=_get_message_dict(exception_class.msg_id),
         **payload

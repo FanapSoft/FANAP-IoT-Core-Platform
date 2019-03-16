@@ -53,7 +53,7 @@ def create_msg_for_device(device, user_data):
 
     dev_dict = dict(
         DeviceName=device.name,
-        TimeStamp=time.time(),
+        TimeStamp=int(time.time()),
         data=user_data
     )
 
