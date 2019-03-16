@@ -7,7 +7,7 @@ from app import db
 def _check_token_is_valid(token):
     token_data = get_user_token_info(token)
 
-    if not token_data['active']:
+    if not token_data or not token_data['active']:
         return None
     return token_data
 
