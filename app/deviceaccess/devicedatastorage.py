@@ -5,11 +5,12 @@ from app.devicedata import validate_decode_device_msg
 
 class DeviceDataStorage:
 
-    def __init__(self, storage):
+    def __init__(self, storage, device_data_push=None):
         self.sender = None
         if not isinstance(storage, (list, tuple)):
             storage = [storage]
         self.storage = storage
+        self.data_push = device_data_push
 
     def get_device_message(self, msg, deviceid):
 
@@ -18,6 +19,10 @@ class DeviceDataStorage:
         if not msg_data:
             # 'ToDo: Generate log for message with access issue'
             return False
+
+        if self.data_push:
+            self.data_push.store_data(msg_data, deviceid)
+
         self._store(msg_data, deviceid)
 
     def send_to_device(self, msg, deviceid):
