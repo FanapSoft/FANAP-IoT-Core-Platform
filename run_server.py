@@ -16,6 +16,8 @@ def create_config_dict():
         Path(__file__).parent.absolute() / DB_FILE
     )
 
+# Define RABBIT_URL, RABBIT_USER, RABBIT_PASSWORD, RABBIT_PORT for pushurl
+
     return app.envparser.build([
         ('SQLALCHEMY_DATABASE_URI', db_uri),
         ('SQLALCHEMY_TRACK_MODIFICATIONS', False, 'bool'),
@@ -38,6 +40,7 @@ def create_config_dict():
         ('USE_TOKEN_CACHE', False, 'bool'),
         ('ENABLE_PUSHURL', False, 'bool'),
     ])
+
 
 
 def create_db():

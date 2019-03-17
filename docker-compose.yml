@@ -68,6 +68,16 @@ services:
     depends_on: 
       - mongodb
 
+  rabbit:
+    image: rabbitmq:3.7.13-management-alpine
+    hostname: rabbit-host
+    container_name: rabbit
+    ports:
+      - ${PLAT_RABBITMQ_MANAGEMENT_PORT}:15672
+    environment: 
+      - RABBITMQ_DEFAULT_USER=${PLAT_RABBITMQ_USER}
+      - RABBITMQ_DEFAULT_PASS=${PLAT_RABBITMQ_PASSWORD}
+
   check_dependencies:
     image: dadarek/wait-for-dependencies
     container_name: wait_for_db
@@ -76,7 +86,7 @@ services:
       - mongodb
       - dbpostgres
       - redis
-    command: mqtt:${PLAT_MQTT_PORT} mongodb:27017 dbpostgres:5432 redis:6379
+    command: mqtt:${PLAT_MQTT_PORT} mongodb:27017 dbpostgres:5432 redis:6379 rabbit:5672
     environment:
       - SLEEP_LENGTH=1
       - TIMEOUT_LENGTH=65
@@ -99,6 +109,11 @@ services:
       - REDIS_URL=redis
       - REDIS_PORT=6379
       - USE_TOKEN_CACHE=True
+      - ENABLE_PUSHURL=True
+      - RABBITMQ_USER=${PLAT_RABBITMQ_USER}
+      - RABBITMQ_PASS=${PLAT_RABBITMQ_PASSWORD}
+      - RABBITMQ_URL=rabbit
+
     depends_on: 
       - check_dependencies
     volumes:
@@ -106,4 +121,13 @@ services:
     entrypoint: 
       - /bin/sh
       - entrypoint.sh
-
+  
+  dataforward:
+    build: dataforward
+    container_name: dataforward-pushurl
+    depends_on: 
+      - check_dependencies
+    environment: 
+      - RABBITMQ_USER=${PLAT_RABBITMQ_USER}
+      - RABBITMQ_PASS=${PLAT_RABBITMQ_PASSWORD}
+      - RABBITMQ_URL=rabbit
