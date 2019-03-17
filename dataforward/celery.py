@@ -10,7 +10,7 @@ def get_brocker_addr():
         port = env("PORT","")
         host = env("URL","localhost")
 
-    brocker_addr = 'ampq://'
+    brocker_addr = 'amqp://'
 
     if usr:
         brocker_addr += usr
