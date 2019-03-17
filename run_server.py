@@ -36,6 +36,7 @@ def create_config_dict():
         ('REDIS_URL', 'localhost'),
         ('REDIS_PORT', 6379, 'int'),
         ('USE_TOKEN_CACHE', False, 'bool'),
+        ('ENABLE_PUSHURL', False, 'bool'),
     ])
 
 

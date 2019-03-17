@@ -16,7 +16,14 @@ def create_devicdatastorage(application):
 
     from app.deviceaccess import DeviceDataStorage
 
-    return DeviceDataStorage(storage)
+
+    storage_list = [storage]
+
+    if application.config['ENABLE_PUSHURL']:
+        from app.deviceaccess.pushurl_storage import PushURLStorage 
+        storage_list.append(PushURLStorage())
+
+    return DeviceDataStorage(storage_list)
 
 
 def create_mqtt_client(application, storage):

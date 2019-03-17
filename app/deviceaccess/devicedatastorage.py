@@ -7,6 +7,8 @@ class DeviceDataStorage:
 
     def __init__(self, storage):
         self.sender = None
+        if not isinstance(storage, (list, tuple)):
+            storage = [storage]
         self.storage = storage
 
     def get_device_message(self, msg, deviceid):
@@ -16,20 +18,31 @@ class DeviceDataStorage:
         if not msg_data:
             # 'ToDo: Generate log for message with access issue'
             return False
-        self.storage.store_data(msg_data, deviceid)
+        self._store(msg_data, deviceid)
 
     def send_to_device(self, msg, deviceid):
         if self.sender:
             self.sender(msg, deviceid)
 
     def read_data(self, field_list, deviceid):
-        return self.storage.read_data(
-            field_list,
-            deviceid
-        )
+        ret = {}
+
+        for s in self.storage:
+            ret.update( 
+                s.read_data(
+                    field_list,
+                    deviceid
+                )
+            )
+
+        return ret
 
     def store_data(self, data, deviceid):
-        self.storage.store_data(data, deviceid)
+        self._store(data, deviceid)
 
     def set_device_sender(self, sender):
         self.sender = sender
+
+    def _store(self, data, deviceid):
+        for s in self.storage:
+            s.store_data(data, deviceid)
