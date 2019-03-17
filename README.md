@@ -55,6 +55,13 @@ Creating default database!
 ![Add devicetype](postman1.png)
 ![Add Device](postman2.png)
 
+### Push Device Data
+
+- Post device data (received from MQTT) to the defined URL
+- Set `ENABLE_PUSHURL` environment variable to enable this feature (requires Celery worker and RabbitMQ)
+- Define target URL by setting `pushURL` when adding a new device
+- `${DEVICE_ID}`, `${DEVICE_NAME}`,`${DEVICETYPE_ID}`,`${DEVICETYPE_NAME}` and `${TIMESTAMP}` can be used in URL
+
 ## Deployment
 
 Example for Docker based deployment is provided. This setup uses PostgreSQL instead of
