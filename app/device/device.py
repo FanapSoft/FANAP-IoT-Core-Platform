@@ -137,6 +137,9 @@ def device_edit(user, data, deviceid, params):
     if 'serialNumber' in data:
         device.serial_number = data['serialNumber']
 
+    if 'pushURL' in data:
+        device.push_url = data['pushURL']
+
     db.session.commit()
 
     return get_ok_response_body(

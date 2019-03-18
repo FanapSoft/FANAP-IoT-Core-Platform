@@ -6,6 +6,9 @@
         "name": {
             "type":"string"
         },
+        "pushURL": {
+            "type":"string"
+        },
         "serialNumber":{
             "type":"string"
         }
