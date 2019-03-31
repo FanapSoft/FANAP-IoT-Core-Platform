@@ -48,15 +48,25 @@ def create_db():
     print('Create database!')
     app.db.create_all()
 
+def update_cache():
+    app.authentication.update_software_token_cache()
 
 config = create_config_dict()
 
 application = app.create_app(config)
 
+stop_run = False
+
 if 'create_db' in sys.argv:
     create_db()
-    exit(0)
+    stop_run = True
 
+if 'update_cache' in sys.argv:
+    update_cache()
+    stop_run = True
+
+if stop_run:
+    exit()
 
 if __name__ == '__main__':
 

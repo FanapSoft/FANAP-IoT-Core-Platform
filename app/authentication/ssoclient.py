@@ -12,9 +12,11 @@ _config = dict(
     software=None,
 )
 
-def _add_all_software_tokens_to_cache(client):
-    for token in app.model.Token.query.all():
-        cache_token(token.token, token.user.user_id)
+
+def update_software_token_cache():
+    if _config['cache_client']:
+        for token in app.model.Token.query.all():
+            cache_token(token.token, token.user.user_id)
 
 
 def setup(app_config):
@@ -33,10 +35,6 @@ def setup(app_config):
         cache_client=cache_client,
         software=app_config['ENABLE_SOFTWARE_USR'],
     )
-
-    if cache_client:
-        _add_all_software_tokens_to_cache(cache_client)
-        
 
 def get_user_authorize_url():
     return sso_authorize_url(
