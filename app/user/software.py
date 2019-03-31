@@ -1,7 +1,7 @@
 from app.model import Token, utils
 from app.common import get_ok_response_body
 from app import db
-
+from app.authentication import delete_token_from_cache, cache_token
 
 def _register_token(user):
     
@@ -12,9 +12,10 @@ def _register_token(user):
         user=user
     )
 
-    # ToDo: Add cache entry
     db.session.add(new_token)
     db.session.commit()
+
+    cache_token(new_token.token, new_token.user.user_id)
 
     return new_token
 
@@ -51,7 +52,7 @@ def software_delete(user, params):
         state = "not found"
     else:
         state = "deleted"
-        # ToDo: Invalidate cache entry
+        delete_token_from_cache(tk.token)
         db.session.delete(tk)
         db.session.commit()
 

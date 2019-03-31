@@ -1,6 +1,7 @@
 import urllib.parse
 import time
 from .ssoaccess import sso_authorize_url, sso_token_info, sso_fetch_token, sso_get_user_profile
+import app.model
 
 _config = dict(
     client_id='UNSET_CLIENT_ID',
@@ -8,7 +9,12 @@ _config = dict(
     sso_url='UNSET_SSO_URL',
     redirect_uri='UNSET_REDIRECT_URI',
     cache_client=None,
+    software=None,
 )
+
+def _add_all_software_tokens_to_cache(client):
+    for token in app.model.Token.query.all():
+        cache_token(token.token, token.user.user_id)
 
 
 def setup(app_config):
@@ -25,8 +31,12 @@ def setup(app_config):
         sso_url=app_config['SSO_URL'],
         redirect_uri=redirect_url,
         cache_client=cache_client,
+        software=app_config['ENABLE_SOFTWARE_USR'],
     )
 
+    if cache_client:
+        _add_all_software_tokens_to_cache(cache_client)
+        
 
 def get_user_authorize_url():
     return sso_authorize_url(
@@ -44,22 +54,42 @@ def _convert_to_str(data):
     if isinstance(data, set):        return set(map(_convert_to_str, data))
 
 
-def _cache_store_tokendata(user_token, token_data, cache_client):
+def _cache_store_tokendata(user_token, token_data, cache_client, has_expire=True):
     if token_data['active']:
         store_data = dict(active=int(token_data['active']), sub=token_data['sub'])
         cache_client.hmset(user_token, store_data)
-        ex_time = int(token_data['exp']-time.time())
-        cache_client.expire(user_token, ex_time)
+        if has_expire:
+            ex_time = int(token_data['exp']-time.time())
+            cache_client.expire(user_token, ex_time)
         return store_data
     return None
 
+def check_software_tokens(user_token):
+    tk = app.model.Token.query.filter_by(
+        token = user_token
+    ).first()
+
+    if not tk:
+        return {}
+    else:
+        return dict(
+            active=True,
+            sub=tk.user.user_id,
+        )
+
+
 def get_user_token_info(user_token):
     cache_client = _config['cache_client']
+    en_sw = _config['software']
+
 
     token_data = {}
     if cache_client:
         token_data = _convert_to_str(cache_client.hgetall(user_token))
 
+    if en_sw and (not token_data):
+        token_data = check_software_tokens(user_token)
+    
     if not token_data:
         status_code, token_data = sso_token_info(
             user_token,
@@ -109,3 +139,23 @@ def get_user_profile(user_token):
 
 def get_config_dict():
     return _config
+
+
+def cache_token(token, user_id):
+    cache_client = _config['cache_client']
+
+    if not cache_client:
+        return
+
+    token_data = dict(active=True, sub=str(user_id))
+
+    _cache_store_tokendata(token, token_data, cache_client, has_expire=False)
+
+
+def delete_token_from_cache(token):
+    cache_client = _config['cache_client']
+
+    if not cache_client:
+        return
+
+    cache_client.delete(token)

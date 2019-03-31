@@ -62,6 +62,10 @@ Creating default database!
 - Define target URL by setting `pushURL` when adding a new device
 - `${DEVICE_ID}`, `${DEVICE_NAME}`,`${DEVICETYPE_ID}`,`${DEVICETYPE_NAME}` and `${TIMESTAMP}` can be used in URL
 
+### Software Access
+
+Permanent token for software can be generated (`PUT` method) or deleted (`DELETE` method) using `HOST/user/software`.
+
 ## Deployment
 
 Example for Docker based deployment is provided. This setup uses PostgreSQL instead of
