@@ -2,6 +2,8 @@
 
 Python implementation of the [Fanap IOT Platform](http://doc.thingscloud.ir/v1.0.0.0/204/API).
 
+![Overview Diagram](docs/diagram.png)
+
 ## Requirements
 
 - Python 3 (3.5 is tested)
